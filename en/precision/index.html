@@ -32,22 +32,36 @@
       crossorigin
     />
     <script type="module" src="/src/main.ts"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Precision","url":"https://flicklab.gg/en/precision/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser precision aim trainer: small targets that shrink with every hit, no speed bonus, and a miss restores full size. Measure accuracy, not click rate.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How small do the targets get?","acceptedAnswer":{"@type":"Answer","text":"Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius."}},{"@type":"Question","name":"Why does a miss restore the target size?","acceptedAnswer":{"@type":"Answer","text":"So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets."}},{"@type":"Question","name":"Is this mode good for beginners?","acceptedAnswer":{"@type":"Answer","text":"Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Precision","url":"https://flicklab.gg/en/precision/","inLanguage":"en","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser precision aim trainer: small targets that shrink with every hit, no speed bonus, and a miss restores full size. Measure accuracy, not click rate.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","inLanguage":"en","mainEntity":[{"@type":"Question","name":"How small do the targets get?","acceptedAnswer":{"@type":"Answer","text":"Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius."}},{"@type":"Question","name":"Why does a miss restore the target size?","acceptedAnswer":{"@type":"Answer","text":"So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets."}},{"@type":"Question","name":"Is this mode good for beginners?","acceptedAnswer":{"@type":"Answer","text":"Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing."}}]}]}</script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="topbar">
       <div class="page topbar-inner">
         <a class="brand" href="/en/">FlickLab<span>.</span></a>
         <nav class="nav" aria-label="Main">
           <a href="/en/precision/" aria-current="page">Precision</a>
           <a href="/en/">All modes</a>
+                  <a
+          class="lang-switch"
+          href="/ar/precision/"
+          hreflang="ar"
+          lang="ar"
+          title="Switch to Arabic"
+          >العربية</a
+        >
         </nav>
       </div>
     </header>
 
-    <main class="page">
+    <main class="page" id="main">
       <section class="mode-head">
-        <h1>Precision</h1>
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--precision" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.2" /><circle cx="12" cy="12" r="5.4" /><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none" /></svg>
+          </span>
+          <h1>Precision</h1>
+        </div>
         <p class="lede">Small targets, and each hit makes the next one smaller. A miss gives the size back. Nothing here rewards clicking faster.</p>
       </section>
 
@@ -55,7 +69,7 @@
         <div class="overlay overlay-idle">
           <div class="overlay-body">
             <p class="overlay-kicker">Normal targets · 30 seconds</p>
-            <button type="button" class="primary" data-play>Start run</button>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>Start run</button>
             <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
             <noscript>
               <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>

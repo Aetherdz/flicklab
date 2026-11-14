@@ -4,12 +4,16 @@ Browser aim trainer built around measured runs: fixed-timestep simulation,
 seeded randomness, and an input log that can be replayed. Six modes share one
 engine, every page is static HTML with the game loaded only when you press play.
 
-**Phase 2 (current):** all six modes, per-mode scoring and results, a live
-settings panel (themes, target appearance, crosshair editor, input, audio,
-motion), share codes, personal bests and a progress chart, plus six static
-mode pages generated from one content file.
+**Phase 3 (current):** Arabic and English as first-class locales. Every route
+exists twice, `/en/` and `/ar/`, generated from `content/site.json` plus one copy
+file per language, and each page carries its own `lang`/`dir`, canonical,
+hreflang pair and JSON-LD. UI strings resolve through `src/i18n/`, and the layout
+mirrors with CSS logical properties rather than a duplicated RTL stylesheet.
 
-Phases 3-5 add Arabic/RTL, share cards, leaderboards and monetization.
+Phase 2 shipped the rest: six modes, per-mode scoring and results, a live
+settings panel, share codes, personal bests and a progress chart.
+
+Phases 4-5 add share cards, leaderboards and monetization.
 
 ## Stack
 
@@ -34,7 +38,7 @@ pnpm build          # typecheck + production build into dist/
 pnpm preview        # serve dist/
 pnpm test           # unit tests (Vitest)
 pnpm test:e2e       # browser tests (Playwright, needs: npx playwright install --only-shell chromium)
-pnpm pages          # regenerate en/<mode>/index.html from content/modes.json
+pnpm pages          # regenerate en/<mode>/ and ar/<mode>/ from content/
 pnpm fonts          # re-download the self-hosted font subsets
 ```
 
@@ -47,13 +51,13 @@ src/modes/      one file per mode + registry with mode metadata
 src/ui/         Preact shell, controller that binds sim to the browser,
                 settings panel, progress chart
 src/settings/   settings schema, sanitising, crosshair SVG, share codes
-src/stats/      localStorage run store, personal bests
-src/i18n/       (phase 3) en/ar string catalogues
-content/        modes.json — copy, metadata and FAQ for every mode page
-scripts/        gen-pages.mjs — builds en/<mode>/index.html from the content
+src/i18n/       en/ar string catalogues; every UI label resolves through t()
+content/        modes.json and modes.ar.json — copy, metadata and FAQ per mode;
+                site.json — site chrome per locale
+scripts/        gen-pages.mjs — builds en/ and ar/ home plus mode pages
 tests/unit/     engine and scoring tests
 tests/e2e/      per-mode, settings and mobile browser tests
-en/, ar/        static route pages (MPA entries)
+en/, ar/        static route pages (MPA entries); ar/ routes mirror en/
 ```
 
 ## How the engine works
@@ -120,20 +124,22 @@ change a value.
    Keep state in preallocated fields; draw only inside `draw`.
 2. Register it in `src/modes/registry.ts` and add its id to `ModeId` in
    `src/engine/types.ts`.
-3. Add the route: `en/<id>/index.html` (and `ar/<id>/` in phase 3), plus the
-   entry in `vite.config.ts` and the sitemap generator.
+3. Add the mode to `ORDER` in `scripts/gen-pages.mjs` and give it copy in
+   `content/modes.json` and `content/modes.ar.json`; add the two page entries to
+   the `build.rollupOptions.input` map in `vite.config.ts`.
 4. Add `tests/unit/<id>.test.ts` covering spawn rules, scoring and a determinism
    replay, and `tests/e2e/<id>.spec.ts` covering start → hit → miss → finish.
-5. Add the strings to `src/i18n/en.json` and `src/i18n/ar.json` (phase 3); no
-   literal copy inside components.
+5. Add the strings to `src/i18n/en.json` and `src/i18n/ar.json`; no literal
+   copy inside components.
 
 A mode is expected to land in roughly 100-150 lines.
 
 ## Testing notes
 
-- 37 unit tests cover the loop, RNG, scoring, determinism, appearance scaling
-  and every mode's rules; 22 Playwright tests cover each mode page, the settings
-  panel, share codes and touch input.
+- 48 unit tests cover the loop, RNG, scoring, determinism, appearance scaling,
+  the attract field and every mode's rules; 28 Playwright tests cover each mode
+  page, the settings panel, share codes, touch input and the Arabic routes
+  (RTL layout, translated HUD and results labels, a full run on `/ar/cps/`).
 - `tests/e2e` drives the game through `window.__fl`, exposed only when the URL
   has `?test=1` and the bundle is a dev build. It can start a run with a fixed
   seed and advance simulation time directly, so tests never depend on animation

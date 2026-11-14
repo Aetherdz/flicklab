@@ -169,11 +169,39 @@ test.describe('CPS', () => {
     const hud = await page.evaluate(() => window.__fl!.hud());
     expect(hud.hits).toBe(30);
     expect(hud.accuracy).toBe(1);
-    expect(hud.progress?.label).toBe('CPS');
+    expect(hud.progress?.label).toBe('hud.cps');
 
     await finish(page);
     await expect(page.locator('.results-grid dt').filter({ hasText: 'Clicks per second' })).toBeVisible();
   });
+});
+
+// Main page test for the icons and CTA
+test('main page renders 6 mode cards with icons and filled CTA', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/en/');
+  
+  // Check that h1 element exists
+  await expect(page.locator('h1')).toBeVisible();
+  
+  // Check that there are 6 mode cards
+  const modeCards = page.locator('.mode-card');
+  await expect(modeCards).toHaveCount(6);
+  
+  // Check that each mode card has an icon
+  for (let i = 0; i < 6; i++) {
+    const icon = modeCards.nth(i).locator('.mode-icon');
+    await expect(icon).toBeVisible();
+  }
+  
+  // Check that CTA button exists and has filled styling
+  const cta = page.locator('.primary');
+  await expect(cta).toBeVisible();
+  await expect(cta).toHaveCSS('background-color', 'rgb(61, 214, 245)'); // --accent
+  
+  // Check that no JavaScript errors occurred
+  expect(errors).toEqual([]);
 });
 
 test('the duration rail follows the mode', async ({ page }) => {

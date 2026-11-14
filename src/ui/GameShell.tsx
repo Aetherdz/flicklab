@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Difficulty, ModeId, RunResult } from '../engine/types';
+import { t, type StringKey } from '../i18n';
 import { MODE_META } from '../modes/registry';
 import { loadSettings, saveSettings, type Settings } from '../settings/model';
 import { personalBest } from '../stats/store';
@@ -12,10 +13,10 @@ import {
 import { ProgressChart } from './ProgressChart';
 import { SettingsPanel } from './SettingsPanel';
 
-const DIFF_LABELS: Record<Difficulty, string> = {
-  easy: 'Easy',
-  normal: 'Normal',
-  hard: 'Hard',
+const DIFFICULTY_KEYS: Record<Difficulty, StringKey> = {
+  easy: 'difficulty.easy',
+  normal: 'difficulty.normal',
+  hard: 'difficulty.hard',
 };
 
 const EMPTY_HUD: HudSnapshot = {
@@ -84,7 +85,10 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
   }, [mode, difficulty, payload]);
 
   useEffect(() => {
-    if (phase === 'finished') resultsHeading.current?.focus();
+    // Move focus to the result without scrolling the page: the replay button
+    // lives in the rail above the field, so the view must stay where the run
+    // just happened.
+    if (phase === 'finished') resultsHeading.current?.focus({ preventScroll: true });
   }, [phase]);
 
   useEffect(() => {
@@ -148,9 +152,12 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
 
   const locked = isLocked(phase);
   const timeLabel = formatClock(phase === 'idle' ? durationMs : hud.timeLeftMs);
-  const accuracyLabel = mode === 'tracking' ? 'On target' : 'Accuracy';
-  const hitsLabel = mode === 'cps' ? 'Clicks' : mode === 'tracking' ? 'On time' : 'Hits';
+  const accuracyLabel = t(mode === 'tracking' ? 'hud.onTarget' : 'hud.accuracy');
+  const hitsLabel = t(
+    mode === 'cps' ? 'hud.clicks' : mode === 'tracking' ? 'hud.onTime' : 'hud.hits',
+  );
   const hitsValue = mode === 'tracking' ? `${(hud.hits / 240).toFixed(1)}s` : String(hud.hits);
+  const progressLabel = hud.progress ? t(hud.progress.label as StringKey) : t('hud.time');
 
   return (
     <div class="shell" ref={shellRef}>
@@ -158,10 +165,10 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         {meta.hasDifficulty && (
           <div class="rail-block">
             <span class="rail-label" id="difficulty-label">
-              Difficulty
+              {t('rail.difficulty')}
             </span>
             <div class="seg" role="group" aria-labelledby="difficulty-label">
-              {(Object.keys(DIFF_LABELS) as Difficulty[]).map((key) => (
+              {(Object.keys(DIFFICULTY_KEYS) as Difficulty[]).map((key) => (
                 <button
                   key={key}
                   type="button"
@@ -170,7 +177,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                   disabled={locked}
                   onClick={() => chooseDifficulty(key)}
                 >
-                  {DIFF_LABELS[key]}
+                  {t(DIFFICULTY_KEYS[key])}
                 </button>
               ))}
             </div>
@@ -180,7 +187,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         {meta.durations.length > 0 && (
           <div class="rail-block">
             <span class="rail-label" id="duration-label">
-              Duration
+              {t('rail.duration')}
             </span>
             <div class="seg" role="group" aria-labelledby="duration-label">
               {meta.durations.map((seconds) => (
@@ -200,7 +207,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         )}
 
         <div class="rail-block">
-          <span class="rail-label">Setup</span>
+          <span class="rail-label">{t('rail.setup')}</span>
           <button
             type="button"
             class="ghost rail-settings"
@@ -208,17 +215,17 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
             aria-controls="settings-panel"
             onClick={() => setPanelOpen((open) => !open)}
           >
-            {panelOpen ? 'Close settings' : 'Settings'}
+            {t(panelOpen ? 'rail.closeSettings' : 'rail.settings')}
           </button>
         </div>
 
         <dl class="hud">
           <div class="hud-cell">
-            <dt>Score</dt>
+            <dt>{t('hud.score')}</dt>
             <dd>{hud.score}</dd>
           </div>
           <div class="hud-cell">
-            <dt>{hud.progress?.label ?? 'Time'}</dt>
+            <dt>{progressLabel}</dt>
             <dd>{hud.progress?.value ?? timeLabel}</dd>
           </div>
           <div class="hud-cell">
@@ -231,7 +238,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
           </div>
         </dl>
 
-        <div class={phase === 'finished' ? 'rail-action is-hidden' : 'rail-action'}>
+        <div class="rail-action">
           <button
             type="button"
             class="primary rail-button"
@@ -246,7 +253,11 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
       {panelOpen && <SettingsPanel settings={settings} onChange={updateSettings} />}
 
       <div class="field">
-        <canvas ref={canvasRef} class="field-canvas" aria-label={`${meta.label} playfield`} />
+        <canvas
+          ref={canvasRef}
+          class="field-canvas"
+          aria-label={`${t(`mode.${mode}.label` as StringKey)} ${t('field.playfield')}`}
+        />
 
         {phase === 'countdown' && (
           <div class="overlay overlay-count" aria-live="assertive">
@@ -257,12 +268,12 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         {phase === 'paused' && (
           <div class="overlay overlay-count">
             <div class="overlay-body">
-              <p class="overlay-kicker">Paused</p>
+              <p class="overlay-kicker">{t('overlay.paused')}</p>
               <button type="button" class="primary" onClick={() => controllerRef.current?.togglePause()}>
-                Resume run
+                {t('action.resumeRun')}
               </button>
               <p class="overlay-hint keys-hint">
-                <kbd>Esc</kbd> to resume · <kbd>R</kbd> to restart
+                <kbd>Esc</kbd> {t('hint.escToResume')} · <kbd>R</kbd> {t('hint.rToRestart')}
               </p>
             </div>
           </div>
@@ -272,11 +283,11 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
           <div class="overlay overlay-results" aria-live="polite">
             <div class="results">
               <h2 class="results-title" tabIndex={-1} ref={resultsHeading}>
-                {payload.isBest ? 'New personal best' : 'Run complete'}
+                {t(payload.isBest ? 'results.newBest' : 'results.complete')}
               </h2>
               <p class="results-score">
                 {payload.result.score}
-                <span>score</span>
+                <span>{t('results.score')}</span>
               </p>
               <dl class="results-grid">
                 {resultRows(mode, payload.result).map((row) => (
@@ -289,12 +300,9 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
               <p class="results-meta">
                 {metaLine(payload, best)}
                 {' · '}
-                Seed {payload.result.seed}
+                {t('results.seed', { seed: payload.result.seed })}
               </p>
               <div class="results-actions">
-                <button type="button" class="primary" onClick={() => beginRun(controllerRef.current!)}>
-                  Play again
-                </button>
                 <button
                   type="button"
                   class="ghost"
@@ -304,7 +312,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                     controllerRef.current?.reset();
                   }}
                 >
-                  Change settings
+                  {t('action.changeSettings')}
                 </button>
               </div>
             </div>
@@ -313,15 +321,16 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
       </div>
 
       <div class="field-foot">
-        <span>{meta.blurb}</span>
+        <span>{t(`mode.${mode}.blurb` as StringKey)}</span>
         <span class="keys-hint">
-          <kbd>Enter</kbd> start · <kbd>R</kbd> restart · <kbd>Esc</kbd> pause
+          <kbd>Enter</kbd> {t('keys.start')} · <kbd>R</kbd> {t('keys.restart')} · <kbd>Esc</kbd>{' '}
+          {t('keys.pause')}
         </span>
       </div>
 
       <div class="analysis">
         <div class="analysis-head">
-          <span>Personal best</span>
+          <span>{t('analysis.personalBest')}</span>
           <strong>{best ?? '--'}</strong>
         </div>
         <ProgressChart
@@ -339,44 +348,44 @@ function resultRows(mode: ModeId, result: RunResult): Array<{ label: string; val
     case 'tracking':
       return [
         {
-          label: 'On target',
+          label: t('row.onTarget'),
           value: `${Math.round((result.onTargetRatio ?? result.accuracy) * 100)}%`,
         },
         {
-          label: 'Time on target',
+          label: t('row.timeOnTarget'),
           value: `${((result.onTargetRatio ?? 0) * (result.durationMs / 1000)).toFixed(1)} s`,
         },
-        { label: 'Best unbroken hold', value: `${(result.bestStreak / 240).toFixed(2)} s` },
+        { label: t('row.bestHold'), value: `${(result.bestStreak / 240).toFixed(2)} s` },
       ];
     case 'reaction':
       return [
         {
-          label: 'Average reaction',
+          label: t('row.avgReaction'),
           value: result.avgTimeToTarget === null ? '--' : `${Math.round(result.avgTimeToTarget)} ms`,
         },
-        { label: 'Valid trials', value: `${result.hits}` },
-        { label: 'False starts', value: `${result.misses}` },
+        { label: t('row.validTrials'), value: `${result.hits}` },
+        { label: t('row.falseStarts'), value: `${result.misses}` },
       ];
     case 'cps': {
       const seconds = result.durationMs / 1000;
       return [
-        { label: 'Clicks', value: `${result.hits}` },
-        { label: 'Clicks per second', value: (result.hits / seconds).toFixed(2) },
-        { label: 'Accuracy', value: `${Math.round(result.accuracy * 100)}%` },
+        { label: t('row.clicks'), value: `${result.hits}` },
+        { label: t('row.cps'), value: (result.hits / seconds).toFixed(2) },
+        { label: t('row.accuracy'), value: `${Math.round(result.accuracy * 100)}%` },
       ];
     }
     default:
       return [
-        { label: 'Accuracy', value: `${Math.round(result.accuracy * 100)}%` },
-        { label: 'Hits', value: `${result.hits}` },
-        { label: 'Misses', value: `${result.misses}` },
+        { label: t('row.accuracy'), value: `${Math.round(result.accuracy * 100)}%` },
+        { label: t('row.hits'), value: `${result.hits}` },
+        { label: t('row.misses'), value: `${result.misses}` },
         {
-          label: 'Avg time to target',
+          label: t('row.avgTimeToTarget'),
           value:
             result.avgTimeToTarget === null ? '--' : `${Math.round(result.avgTimeToTarget)} ms`,
         },
-        { label: 'Best streak', value: `${result.bestStreak}` },
-        { label: 'Hits per second', value: result.hitsPerSec.toFixed(2) },
+        { label: t('row.bestStreak'), value: `${result.bestStreak}` },
+        { label: t('row.hitsPerSecond'), value: result.hitsPerSec.toFixed(2) },
       ];
   }
 }
@@ -388,22 +397,22 @@ function isLocked(phase: UiPhase): boolean {
 function primaryLabel(phase: UiPhase): string {
   switch (phase) {
     case 'countdown':
-      return 'Starting';
+      return t('action.starting');
     case 'playing':
-      return 'Pause';
+      return t('action.pause');
     case 'paused':
-      return 'Resume';
+      return t('action.resume');
     case 'finished':
-      return 'Play again';
+      return t('action.playAgain');
     default:
-      return 'Start run';
+      return t('action.start');
   }
 }
 
 function metaLine(payload: ResultPayload, best: number | null): string {
-  if (!payload.isBest) return `Personal best ${best ?? 0}`;
-  if (payload.previousBest === null) return 'First scored run';
-  return `Previous best ${payload.previousBest}`;
+  if (!payload.isBest) return t('results.personalBest', { score: best ?? 0 });
+  if (payload.previousBest === null) return t('results.firstRun');
+  return t('results.previousBest', { score: payload.previousBest });
 }
 
 function formatClock(ms: number): string {

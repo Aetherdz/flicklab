@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>اختبار CPS — النقرات في الثانية | FlickLab</title>
+    <meta name="description" content="اختبار سرعة النقر في المتصفح: مدد من ثانية إلى دقيقة، احتساب كل نقرة داخل اللوحة وقياس التذبذب بين الثواني." />
+    <link rel="canonical" href="https://flicklab.gg/ar/cps/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/cps/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/cps/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/cps/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="ar" />
+    <meta property="og:title" content="اختبار CPS — النقرات في الثانية" />
+    <meta property="og:description" content="اختر المدة وانقر. النقرات الصحيحة وحدها تُحتسب، والثانية تُقاس لا تُخمَّن." />
+    <meta property="og:url" content="https://flicklab.gg/ar/cps/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-400-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-600-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — اختبار CPS","url":"https://flicklab.gg/ar/cps/","inLanguage":"ar","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"اختبار سرعة النقر في المتصفح: مدد من ثانية إلى دقيقة، احتساب كل نقرة داخل اللوحة وقياس التذبذب بين الثواني.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/ar/"}},{"@type":"FAQPage","inLanguage":"ar","mainEntity":[{"@type":"Question","name":"ما هو CPS؟","acceptedAnswer":{"@type":"Answer","text":"عدد النقرات في الثانية. يُحسب بقسمة عدد النقرات الصحيحة على مدة الجولة، ويُقاس هنا بحد أدنى 20 مللي ثانية بين النقرات لتجاهل الأتمتة."}},{"@type":"Question","name":"هل اختبار CPS مجاني؟","acceptedAnswer":{"@type":"Answer","text":"نعم، ويعمل في المتصفح بلا حساب ولا تحميل، والنتائج تُحفظ محلياً على جهازك."}},{"@type":"Question","name":"هل يمكن زيادة CPS بالتمرين؟","acceptedAnswer":{"@type":"Answer","text":"إلى حد ما. التقنية ترفع المعدل أكثر من القوة، لكن الحد الأعلى يعتمد على الجهاز وطريقة الإمساك. الاستمرارية أهم من جلسات طويلة متباعدة."}}]}]}</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/ar/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="القائمة الرئيسية">
+          <a href="/ar/cps/" aria-current="page">اختبار CPS</a>
+          <a href="/ar/">كل الأوضاع</a>
+                  <a
+          class="lang-switch"
+          href="/en/cps/"
+          hreflang="en"
+          lang="en"
+          title="التبديل إلى الإنجليزية"
+          >English</a
+        >
+        </nav>
+      </div>
+    </header>
+
+    <main class="page" id="main">
+      <section class="mode-head">
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--cps" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" /><path d="M12 4.2v2.2M12 17.6v2.2M4.2 12h2.2M17.6 12h2.2" /><path d="M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6" /></svg>
+          </span>
+          <h1>اختبار CPS</h1>
+        </div>
+        <p class="lede">كم نقرة تسجّل في الثانية؟ اختر المدة وانقر داخل اللوحة، والرقم يُحسب من النقرات الصحيحة وحدها.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="cps">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">لوحة عادية · 10 ثوانٍ</p>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>ابدأ الجولة</button>
+            <p class="overlay-hint">بلا حساب وبلا تحميل. نتائجك تبقى على هذا الجهاز.</p>
+            <noscript>
+              <p class="overlay-hint">يحتاج FlickLab إلى JavaScript لتشغيل مدرب التصويب.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>ماذا يقيس CPS</h2>
+        <p>يقيس الوضع سرعة النقر المتكرر داخل لوحة ثابتة، لا سرعة التصويب. لأن اللوحة واحدة والهدف لا يتحرك، يبقى المتغير الوحيد هو معدل إرسال الأوامر من يدك، وهو ما يهم في الألعاب التي تحتاج نقراً متتابعاً.</p>
+        <p>المدد القصيرة (ثانية أو خمس) تقيس الانفجار الأولي، والمدد الطويلة (30 أو 60 ثانية) تقيس التحمل واستقرار المعدل. الرقمان مختلفان بطبيعتهما ولا يُقارنان.</p>
+
+        <h2>كيف تُحسب النتيجة</h2>
+        <dl class="spec">
+          <div>
+            <dt>CPS</dt>
+            <dd>عدد النقرات مقسوماً على مدة الجولة بالثواني، مع تجاهل أي نقرتين بينهما أقل من 20 مللي ثانية.</dd>
+          </div>
+          <div>
+            <dt>النقاط</dt>
+            <dd>CPS مضروباً في 100 ثم في قيمة الصعوبة.</dd>
+          </div>
+          <div>
+            <dt>النقرات</dt>
+            <dd>كل نقرة داخل اللوحة تُحتسب، والنقر خارجها لا.</dd>
+          </div>
+          <div>
+            <dt>الدقة</dt>
+            <dd>نسبة النقرات داخل اللوحة من كل النقرات.</dd>
+          </div>
+        </dl>
+
+        <h2>ما الرقم الجيد</h2>
+        <p>‏6 إلى 8 نقرات في الثانية رقم شائع لمن يستخدم الفأرة بانتظام، و10 فأكثر يحتاج تقنية محددة (نقرتان بالأصابع أو اهتزاز متحكم). الرقم يختلف كثيراً بين الفأرة والمفتاح الميكانيكي ولوحة اللمس، فلا تقارن نتيجتك بجهاز آخر.</p>
+        <p>المهم هو الاستقرار: معدل ينزل في آخر عشر ثوانٍ يعني إجهاداً، ومعدل يقفز عالياً في الثانية الأولى ثم ينهار يعني أنك بدأت بانفجار لا بإيقاع.</p>
+
+        <h2>كيف تنقر أسرع</h2>
+        <ul>
+          <li>نقّر بطرف الإصبع لا بأصله، واترك المعصم ثابتاً على الطاولة.</li>
+          <li>استخدم إيقاعاً ثابتاً بدل محاولة الوصول إلى الحد الأقصى في كل نقرة.</li>
+          <li>جرّب 5 ثوانٍ أولاً، ثم 10، ثم 30؛ القفز مباشرة إلى 60 يعطي رقماً منخفضاً بلا فائدة.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>أسئلة</h2>
+          <details>
+            <summary>ما هو CPS؟</summary>
+            <p>عدد النقرات في الثانية. يُحسب بقسمة عدد النقرات الصحيحة على مدة الجولة، ويُقاس هنا بحد أدنى 20 مللي ثانية بين النقرات لتجاهل الأتمتة.</p>
+          </details>
+          <details>
+            <summary>هل اختبار CPS مجاني؟</summary>
+            <p>نعم، ويعمل في المتصفح بلا حساب ولا تحميل، والنتائج تُحفظ محلياً على جهازك.</p>
+          </details>
+          <details>
+            <summary>هل يمكن زيادة CPS بالتمرين؟</summary>
+            <p>إلى حد ما. التقنية ترفع المعدل أكثر من القوة، لكن الحد الأعلى يعتمد على الجهاز وطريقة الإمساك. الاستمرارية أهم من جلسات طويلة متباعدة.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — تدريب التصويب في المتصفح.</span>
+        <span>النتائج تُحفظ محلياً على هذا الجهاز.</span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 import { useMemo } from 'preact/hooks';
 import type { Difficulty, ModeId } from '../engine/types';
+import { t } from '../i18n';
 import { historyFor } from '../stats/store';
 
 interface Props {
@@ -37,10 +38,10 @@ export function ProgressChart({ mode, difficulty, revision }: Props) {
   return (
     <div class="chart">
       <div class="chart-head">
-        <span class="chart-label">Progress · last {scores.length || 0} runs</span>
+        <span class="chart-label">{t('chart.label', { count: scores.length || 0 })}</span>
         <span class="chart-values">
-          {best !== null && <>Best {best}</>}
-          {latest !== null && <> · Last {latest}</>}
+          {best !== null && <>{t('chart.best', { score: best })}</>}
+          {latest !== null && <> · {t('chart.last', { score: latest })}</>}
         </span>
       </div>
       {geometry ? (
@@ -49,12 +50,12 @@ export function ProgressChart({ mode, difficulty, revision }: Props) {
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
           preserveAspectRatio="none"
           role="img"
-          aria-label={`Scores over the last ${scores.length} runs, best ${best}`}
+          aria-label={t('chart.aria', { count: scores.length, best: best ?? 0 })}
         >
           <polyline points={geometry.points} fill="none" stroke="currentColor" stroke-width="1.5" />
         </svg>
       ) : (
-        <p class="chart-empty">Two finished runs of the same mode and difficulty draw a trend line.</p>
+        <p class="chart-empty">{t('chart.empty')}</p>
       )}
     </div>
   );

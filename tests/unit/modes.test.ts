@@ -224,7 +224,7 @@ describe('Reaction', () => {
   it('reports trial progress', () => {
     const { game } = makeGame('reaction');
     startRun(game);
-    expect(game.runtime.progress?.()).toEqual({ label: 'Trial', value: '1/5' });
+    expect(game.runtime.progress?.()).toEqual({ label: 'hud.trial', value: '1/5' });
   });
 });
 

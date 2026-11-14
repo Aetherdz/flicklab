@@ -165,7 +165,7 @@ export class Reaction implements ModeRuntime {
 
   progress(): HudProgress {
     return {
-      label: 'Trial',
+      label: 'hud.trial',
       value: `${Math.min(this.trial + 1, TRIALS)}/${TRIALS}`,
     };
   }

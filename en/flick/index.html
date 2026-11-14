@@ -32,22 +32,36 @@
       crossorigin
     />
     <script type="module" src="/src/main.ts"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Flick","url":"https://flicklab.gg/en/flick/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser flick trainer: one target at a time, a new position after every hit, and the time between appearance and click measured from the input event. 15, 30 or 60 second runs.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is Flick different from Gridshot?","acceptedAnswer":{"@type":"Answer","text":"Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself."}},{"@type":"Question","name":"Why does a miss not move the target?","acceptedAnswer":{"@type":"Answer","text":"So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position."}},{"@type":"Question","name":"Should I use pointer lock?","acceptedAnswer":{"@type":"Answer","text":"It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Flick","url":"https://flicklab.gg/en/flick/","inLanguage":"en","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser flick trainer: one target at a time, a new position after every hit, and the time between appearance and click measured from the input event. 15, 30 or 60 second runs.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","inLanguage":"en","mainEntity":[{"@type":"Question","name":"How is Flick different from Gridshot?","acceptedAnswer":{"@type":"Answer","text":"Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself."}},{"@type":"Question","name":"Why does a miss not move the target?","acceptedAnswer":{"@type":"Answer","text":"So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position."}},{"@type":"Question","name":"Should I use pointer lock?","acceptedAnswer":{"@type":"Answer","text":"It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes."}}]}]}</script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="topbar">
       <div class="page topbar-inner">
         <a class="brand" href="/en/">FlickLab<span>.</span></a>
         <nav class="nav" aria-label="Main">
           <a href="/en/flick/" aria-current="page">Flick</a>
           <a href="/en/">All modes</a>
+                  <a
+          class="lang-switch"
+          href="/ar/flick/"
+          hreflang="ar"
+          lang="ar"
+          title="Switch to Arabic"
+          >العربية</a
+        >
         </nav>
       </div>
     </header>
 
-    <main class="page">
+    <main class="page" id="main">
       <section class="mode-head">
-        <h1>Flick</h1>
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--flick" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="19" r="2.2" /><circle cx="19" cy="5" r="2.6" /><path d="M7.9 16.1 16.1 7.9" stroke-dasharray="3 3" /></svg>
+          </span>
+          <h1>Flick</h1>
+        </div>
         <p class="lede">One target, one jump, one click. Every hit moves the target somewhere it was not, and the clock runs from the moment it appeared.</p>
       </section>
 
@@ -55,7 +69,7 @@
         <div class="overlay overlay-idle">
           <div class="overlay-body">
             <p class="overlay-kicker">Normal targets · 30 seconds</p>
-            <button type="button" class="primary" data-play>Start run</button>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>Start run</button>
             <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
             <noscript>
               <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>

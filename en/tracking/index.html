@@ -32,22 +32,36 @@
       crossorigin
     />
     <script type="module" src="/src/main.ts"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Tracking","url":"https://flicklab.gg/en/tracking/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser tracking aim trainer: keep the cursor inside a moving target and get scored on the share of time you stay on it. 15, 30 or 60 second runs at three speeds.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do clicks not count?","acceptedAnswer":{"@type":"Answer","text":"Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill."}},{"@type":"Question","name":"What is a good on-target percentage?","acceptedAnswer":{"@type":"Answer","text":"Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed."}},{"@type":"Question","name":"Does the target follow the same path every run?","acceptedAnswer":{"@type":"Answer","text":"With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Tracking","url":"https://flicklab.gg/en/tracking/","inLanguage":"en","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser tracking aim trainer: keep the cursor inside a moving target and get scored on the share of time you stay on it. 15, 30 or 60 second runs at three speeds.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","inLanguage":"en","mainEntity":[{"@type":"Question","name":"Why do clicks not count?","acceptedAnswer":{"@type":"Answer","text":"Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill."}},{"@type":"Question","name":"What is a good on-target percentage?","acceptedAnswer":{"@type":"Answer","text":"Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed."}},{"@type":"Question","name":"Does the target follow the same path every run?","acceptedAnswer":{"@type":"Answer","text":"With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it."}}]}]}</script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="topbar">
       <div class="page topbar-inner">
         <a class="brand" href="/en/">FlickLab<span>.</span></a>
         <nav class="nav" aria-label="Main">
           <a href="/en/tracking/" aria-current="page">Tracking</a>
           <a href="/en/">All modes</a>
+                  <a
+          class="lang-switch"
+          href="/ar/tracking/"
+          hreflang="ar"
+          lang="ar"
+          title="Switch to Arabic"
+          >العربية</a
+        >
         </nav>
       </div>
     </header>
 
-    <main class="page">
+    <main class="page" id="main">
       <section class="mode-head">
-        <h1>Tracking</h1>
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--tracking" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 13c2.4-6 4.8-6 7.2 0s4.8 6 7.2 0 2.4-3.4 3.6-2.4" /><circle cx="13" cy="13" r="2.4" fill="currentColor" stroke="none" /></svg>
+          </span>
+          <h1>Tracking</h1>
+        </div>
         <p class="lede">The target does not wait for you. Hold the cursor inside it and the score is the time you managed to stay there.</p>
       </section>
 
@@ -55,7 +69,7 @@
         <div class="overlay overlay-idle">
           <div class="overlay-body">
             <p class="overlay-kicker">Normal speed · 30 seconds</p>
-            <button type="button" class="primary" data-play>Start run</button>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>Start run</button>
             <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
             <noscript>
               <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>

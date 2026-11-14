@@ -131,7 +131,7 @@ export class Cps implements ModeRuntime {
 
   progress(): HudProgress {
     const seconds = Math.max(0.001, this.elapsed / 1000);
-    return { label: 'CPS', value: (this.hits / seconds).toFixed(1) };
+    return { label: 'hud.cps', value: (this.hits / seconds).toFixed(1) };
   }
 
   aimPoints(): AimPoint[] {

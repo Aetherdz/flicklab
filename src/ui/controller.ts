@@ -1,4 +1,5 @@
 import { resolveAppearance, type Appearance } from '../engine/appearance';
+import { AttractField } from '../engine/attract';
 import { Sfx } from '../engine/audio';
 import { Surface } from '../engine/canvas';
 import { FIXED_STEP_MS } from '../engine/constants';
@@ -85,7 +86,9 @@ export class GameController {
 
   private game: Game | null = null;
   private readonly look: Appearance;
-  private idleGame: Game | null = null;
+  private attract: AttractField | null = null;
+  private attractFrame = 0;
+  private attractLast = 0;
   private phase: UiPhase = 'idle';
   private origin = 0;
   private lastHudAt = 0;
@@ -119,7 +122,11 @@ export class GameController {
       canvas,
       {
         onTap: (x, y, ts) => this.handleTap(x, y, ts),
-        onMove: (x, y) => this.game?.setCursor(x, y),
+        // Before a run the field is cosmetic, so the pointer only aims the preview.
+        onMove: (x, y) => {
+          this.game?.setCursor(x, y);
+          this.attract?.setAim(x, y);
+        },
       },
       {
         sensitivity: this.settings.sensitivity,
@@ -132,8 +139,7 @@ export class GameController {
     this.surface.onResize(() => {
       const { cssW, cssH } = this.surface.view;
       this.game?.setWorld(cssW, cssH);
-      this.idleGame?.setWorld(cssW, cssH);
-      if (!this.game && !this.idleGame) this.preview();
+      this.attract?.setWorld(cssW, cssH);
       this.draw();
     });
 
@@ -143,7 +149,7 @@ export class GameController {
       this.publishHud();
     });
 
-    this.preview();
+    this.startAttract();
   }
 
   get currentGame(): Game | null {
@@ -158,14 +164,14 @@ export class GameController {
     if (this.phase === 'countdown' || this.phase === 'playing' || this.phase === 'paused') return;
     this.difficulty = difficulty;
     this.game = null;
-    this.preview();
+    this.startAttract();
   }
 
   setDuration(durationMs: number): void {
     if (this.phase === 'countdown' || this.phase === 'playing' || this.phase === 'paused') return;
     this.durationMs = durationMs;
     this.game = null;
-    this.preview();
+    this.startAttract();
   }
 
   setSensitivity(value: number): void {
@@ -217,7 +223,7 @@ export class GameController {
       onSfx: (name) => this.sfx.play(name),
     });
     this.game = game;
-    this.idleGame = null;
+    this.stopAttract();
     this.sfx.unlock();
     this.setPhase('countdown');
     this.publishHud(true);
@@ -236,8 +242,7 @@ export class GameController {
     this.game = null;
     this.lastResult = null;
     this.setPhase('idle');
-    this.idleGame = null;
-    this.preview();
+    this.startAttract();
     this.publishHud(true);
   }
 
@@ -280,7 +285,7 @@ export class GameController {
 
   targets(): AimPoint[] {
     if (this.game) return this.game.runtime.aimPoints?.() ?? [];
-    return this.idleGame?.runtime.aimPoints?.() ?? [];
+    return this.attract?.aimPoints() ?? [];
   }
 
   canvasSize(): { w: number; h: number } {
@@ -290,9 +295,11 @@ export class GameController {
   draw(): void {
     if (this.destroyed) return;
     const ctx = this.surface.ctx;
-    const game = this.game ?? this.idleGame;
-    if (!game) return;
-    game.runtime.draw(ctx, 1);
+    if (this.game) {
+      this.game.runtime.draw(ctx, 1);
+      return;
+    }
+    this.attract?.draw(ctx);
   }
 
   destroy(): void {
@@ -303,24 +310,43 @@ export class GameController {
     this.sfx.dispose();
   }
 
-  private preview(): void {
+  /**
+   * Keeps the field alive before a run: targets drift, and a click pops one
+   * and respawns it elsewhere. It runs on its own animation frame at render
+   * cadence rather than on the fixed simulation step, because nothing here is
+   * measured.
+   */
+  private startAttract(): void {
+    this.stopAttract();
     const { cssW, cssH } = this.surface.view;
     if (cssW < 2 || cssH < 2) return;
-    const config: RunConfig = {
-      mode: this.mode,
-      difficulty: this.difficulty,
-      durationMs: this.durationMs,
-      seed: 0x5eed,
+
+    const field = new AttractField(this.look, undefined, this.difficulty);
+    field.setWorld(cssW, cssH);
+    this.attract = field;
+
+    if (this.manual) {
+      field.draw(this.surface.ctx);
+      return;
+    }
+
+    this.attractLast = performance.now();
+    const tick = (now: number): void => {
+      const active = this.attract;
+      if (!active || this.game || this.destroyed) return;
+      const dt = now - this.attractLast;
+      this.attractLast = now;
+      active.update(dt);
+      active.draw(this.surface.ctx);
+      this.attractFrame = requestAnimationFrame(tick);
     };
-    const world = { w: cssW, h: cssH };
-    const game = new Game({
-      config,
-      mode: createMode(config, new Rng(config.seed), world, this.look),
-      world,
-    });
-    game.runtime.begin();
-    this.idleGame = game;
-    this.draw();
+    this.attractFrame = requestAnimationFrame(tick);
+  }
+
+  private stopAttract(): void {
+    if (this.attractFrame) cancelAnimationFrame(this.attractFrame);
+    this.attractFrame = 0;
+    this.attract = null;
   }
 
   private stepOnce(): void {
@@ -350,13 +376,25 @@ export class GameController {
 
   private handleTap(x: number, y: number, ts: number): void {
     const game = this.game;
-    if (!game || game.state !== 'running') return;
+    if (!game || game.state !== 'running') {
+      // Before a run the field is a demo: pops are feedback, not a score.
+      if (!game) {
+        this.sfx.unlock();
+        const field = this.attract;
+        if (!field) return;
+        // Aim first so a tap with no prior pointer move still fires from the barrel.
+        field.setAim(x, y);
+        if (field.tap(x, y)) this.sfx.play('hit');
+        field.draw(this.surface.ctx);
+      }
+      return;
+    }
     // Every tap is a user gesture: use it to create or resume the audio context.
     this.sfx.unlock();
     game.tap(x, y, ts - this.origin);
   }
 
-  private setPhase(phase: UiPhase): void {
+  setPhase(phase: UiPhase): void {
     if (this.phase === phase) return;
     this.phase = phase;
     this.callbacks.onPhase(phase);

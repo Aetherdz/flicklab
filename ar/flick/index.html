@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>تدريب Flick — نقلة واحدة وهدف واحد | FlickLab</title>
+    <meta name="description" content="تدريب Flick في المتصفح: هدف واحد ينتقل بعد كل إصابة، مع قياس زمن الوصول والدقة وأفضل تتابع في كل جولة." />
+    <link rel="canonical" href="https://flicklab.gg/ar/flick/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/flick/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/flick/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/flick/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="ar" />
+    <meta property="og:title" content="تدريب Flick — هدف واحد، نقلة واحدة" />
+    <meta property="og:description" content="هدف واحد ينتقل مع كل إصابة. قِس زمن الوصول ودقتك في المتصفح." />
+    <meta property="og:url" content="https://flicklab.gg/ar/flick/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-400-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-600-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Flick","url":"https://flicklab.gg/ar/flick/","inLanguage":"ar","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"تدريب Flick في المتصفح: هدف واحد ينتقل بعد كل إصابة، مع قياس زمن الوصول والدقة وأفضل تتابع في كل جولة.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/ar/"}},{"@type":"FAQPage","inLanguage":"ar","mainEntity":[{"@type":"Question","name":"ما معنى Flick في التصويب؟","acceptedAnswer":{"@type":"Answer","text":"نقلة سريعة من موضع المؤشر إلى هدف ظهر في مكان آخر. سرعتها تعتمد على المسافة وحجم الهدف، ودقتها على توقف اليد في اللحظة الصحيحة."}},{"@type":"Question","name":"ما الفرق بين Flick وGridshot؟","acceptedAnswer":{"@type":"Answer","text":"Gridshot يعرض ثلاثة أهداف فتقيس التنقل بينها، وFlick يعرض هدفاً واحداً فتقيس نقلة كاملة من البداية إلى التوقف."}},{"@type":"Question","name":"هل أستخدم نفس حساسية لعبتي؟","acceptedAnswer":{"@type":"Answer","text":"نعم إن أمكن. اضبط الحساسية من إعدادات FlickLab حتى تطابق لعبتك ثم ثبّتها ولا تلمسها بين الجولات حتى تبقى الأرقام قابلة للمقارنة."}}]}]}</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/ar/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="القائمة الرئيسية">
+          <a href="/ar/flick/" aria-current="page">Flick</a>
+          <a href="/ar/">كل الأوضاع</a>
+                  <a
+          class="lang-switch"
+          href="/en/flick/"
+          hreflang="en"
+          lang="en"
+          title="التبديل إلى الإنجليزية"
+          >English</a
+        >
+        </nav>
+      </div>
+    </header>
+
+    <main class="page" id="main">
+      <section class="mode-head">
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--flick" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="19" r="2.2" /><circle cx="19" cy="5" r="2.6" /><path d="M7.9 16.1 16.1 7.9" stroke-dasharray="3 3" /></svg>
+          </span>
+          <h1>Flick</h1>
+        </div>
+        <p class="lede">هدف واحد في كل لحظة. كل إصابة تقذفه إلى الطرف الآخر من الميدان، والمطلوب أن تصل إليه قبل أن تفكر.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="flick">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">أهداف عادية · 30 ثانية</p>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>ابدأ الجولة</button>
+            <p class="overlay-hint">بلا حساب وبلا تحميل. نتائجك تبقى على هذا الجهاز.</p>
+            <noscript>
+              <p class="overlay-hint">يحتاج FlickLab إلى JavaScript لتشغيل مدرب التصويب.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>ماذا يدرّب Flick</h2>
+        <p>النقلة مهارة قصيرة: مسافة، سرعة، توقف دقيق. ولأن الهدف يختفي بعد الإصابة، لا يمكنك تصحيح النقرة — إما أن تصل أو لا تصل. هذا يجعل الخطأ مرئياً فوراً، وهو ما يجعل التمرين مفيداً: لا شيء يخفي يدك.</p>
+        <p>المسافة هنا أطول من Gridshot عادةً، لأن الهدف الوحيد ينتقل في الميدان كله بدل خلية واحدة. إن أردت تدريب المسافات القصيرة فكبّر الهدف أو صغّر الميدان من الإعدادات.</p>
+
+        <h2>كيف تُحسب النتيجة</h2>
+        <dl class="spec">
+          <div>
+            <dt>النقاط</dt>
+            <dd>الإصابات مضروبة في قيمة الصعوبة ثم في عشرة.</dd>
+          </div>
+          <div>
+            <dt>الدقة</dt>
+            <dd>كل نقرة تُحتسب، والإصابة لا تُسجَّل إلا داخل الهدف.</dd>
+          </div>
+          <div>
+            <dt>زمن الوصول</dt>
+            <dd>من ظهور الهدف إلى النقرة التي أصابته.</dd>
+          </div>
+          <div>
+            <dt>التتابع</dt>
+            <dd>أطول سلسلة إصابات متتالية في الجولة.</dd>
+          </div>
+        </dl>
+
+        <h2>السرعة ليست الهدف</h2>
+        <p>أسرع نقلة ليست أفضل نقلة. إذا كان متوسط زمن الوصول 400 مللي ثانية ودقتك 60%، فأنت تنقل قبل أن تتأكد أين الهدف. اخفض السرعة حتى تبلغ الدقة 90% ثم اترك النقاط تلحق وحدها؛ عادةً ما تلحق خلال ثلاث أو أربع جولات.</p>
+
+        <h2>تمارين مقترحة</h2>
+        <ul>
+          <li>جولة كاملة بسرعة 70% من سرعتك المعتادة، وسجّل الدقة.</li>
+          <li>جرّب حساسية أقل بـ20% في الجولة التالية وقارن زمن الوصول.</li>
+          <li>لا ترفع المؤشر عن اللوحة بين النقلات؛ الرفع يضيف زمناً لا يظهر في النتيجة.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>أسئلة</h2>
+          <details>
+            <summary>ما معنى Flick في التصويب؟</summary>
+            <p>نقلة سريعة من موضع المؤشر إلى هدف ظهر في مكان آخر. سرعتها تعتمد على المسافة وحجم الهدف، ودقتها على توقف اليد في اللحظة الصحيحة.</p>
+          </details>
+          <details>
+            <summary>ما الفرق بين Flick وGridshot؟</summary>
+            <p>Gridshot يعرض ثلاثة أهداف فتقيس التنقل بينها، وFlick يعرض هدفاً واحداً فتقيس نقلة كاملة من البداية إلى التوقف.</p>
+          </details>
+          <details>
+            <summary>هل أستخدم نفس حساسية لعبتي؟</summary>
+            <p>نعم إن أمكن. اضبط الحساسية من إعدادات FlickLab حتى تطابق لعبتك ثم ثبّتها ولا تلمسها بين الجولات حتى تبقى الأرقام قابلة للمقارنة.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — تدريب التصويب في المتصفح.</span>
+        <span>النتائج تُحفظ محلياً على هذا الجهاز.</span>
+      </div>
+    </footer>
+  </body>
+</html>

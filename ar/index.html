@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlickLab — مدرب تصويب في المتصفح</title>
+    <meta name="description" content="مدرب تصويب مجاني في المتصفح: Gridshot وFlick والتتبع والدقة وزمن رد الفعل وسرعة النقر، مع نتائج قابلة للإعادة والتحقق." />
+    <link rel="canonical" href="https://flicklab.gg/ar/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="ar" />
+    <meta property="og:title" content="FlickLab — مدرب تصويب في المتصفح" />
+    <meta property="og:description" content="مدرب تصويب مجاني في المتصفح: Gridshot وFlick والتتبع والدقة وزمن رد الفعل وسرعة النقر، مع نتائج قابلة للإعادة والتحقق." />
+    <meta property="og:url" content="https://flicklab.gg/ar/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-400-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-600-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <style>
+      .modes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        margin-top: 40px;
+      }
+
+      .mode-card {
+        display: block;
+        padding: 22px;
+        background: var(--panel);
+      }
+
+      .mode-card:hover {
+        background: var(--panel-2);
+      }
+
+      .mode-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .mode-icon {
+        width: 24px;
+        height: 24px;
+        color: var(--accent);
+        opacity: 0.9;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .mode-icon.mode-icon--flick,
+      .mode-icon.mode-icon--reaction {
+        color: var(--hit);
+      }
+
+      .mode-card-header:hover .mode-icon {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+
+      .mode-card h2 {
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 0;
+      }
+
+      .hero h1 {
+        max-width: 20ch;
+        font-size: clamp(2.4rem, 5vw, 3.4rem);
+      }
+
+      @media (max-width: 900px) {
+        .modes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .modes {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mode-card.is-later {
+        opacity: 0.55;
+      }
+
+      .mode-card p {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .mode-card span {
+        display: block;
+        margin-top: 12px;
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/ar/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="القائمة الرئيسية">
+          <a href="/ar/gridshot/">Gridshot</a>
+          <a href="/ar/flick/">Flick</a>
+          <a href="/ar/tracking/">Tracking</a>
+                  <a
+          class="lang-switch"
+          href="/en/"
+          hreflang="en"
+          lang="en"
+          title="التبديل إلى الإنجليزية"
+          >English</a
+        >
+        </nav>
+      </div>
+    </header>
+
+    <main class="page" id="main">
+      <section class="mode-head hero">
+        <h1>مدرب تصويب يقيس ما لا تشعر به.</h1>
+        <p class="lede">ستة تمارين، بلا تحميل، وستون ثانية في كل مرة. كل جولة تحمل بذرة ثابتة، فتصبح النتيجة قابلة للإعادة لا مجرد رقم يُصدَّق.</p>
+      </section>
+
+      <div class="shell" data-game data-demo data-mode="gridshot">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Gridshot · 60 ثانية</p>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>ابدأ الجولة</button>
+            <p class="overlay-hint">الأهداف حيّة — انقر واحداً بينما تنتظر.</p>
+            <noscript>
+              <p class="overlay-hint">يحتاج FlickLab إلى JavaScript لتشغيل مدرب التصويب.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <section class="modes" aria-label="الأوضاع">
+        <a class="mode-card is-live" href="/ar/gridshot/">
+          <div class="mode-card-header">
+            <div class="mode-icon" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="1" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /><circle cx="6" cy="6" r="2" fill="currentColor" stroke="none" /><circle cx="18" cy="12" r="2" fill="currentColor" stroke="none" /><circle cx="12" cy="18" r="2" fill="currentColor" stroke="none" /></svg>
+            </div>
+            <h2>Gridshot</h2>
+          </div>
+          <p>ثلاثة أهداف على تسع خلايا، إعادة ظهور فورية، ستون ثانية.</p>
+          <span>العب الآن</span>
+        </a>
+        <a class="mode-card is-live" href="/ar/flick/">
+          <div class="mode-card-header">
+            <div class="mode-icon mode-icon--flick" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="19" r="2.2" /><circle cx="19" cy="5" r="2.6" /><path d="M7.9 16.1 16.1 7.9" stroke-dasharray="3 3" /></svg>
+            </div>
+            <h2>Flick</h2>
+          </div>
+          <p>هدف واحد في كل لحظة. كل إصابة تنقله إلى الجهة الأخرى.</p>
+          <span>العب الآن</span>
+        </a>
+        <a class="mode-card is-live" href="/ar/tracking/">
+          <div class="mode-card-header">
+            <div class="mode-icon" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 13c2.4-6 4.8-6 7.2 0s4.8 6 7.2 0 2.4-3.4 3.6-2.4" /><circle cx="13" cy="13" r="2.4" fill="currentColor" stroke="none" /></svg>
+            </div>
+            <h2>Tracking</h2>
+          </div>
+          <p>أبقِ المؤشر على هدف متحرك؛ النتيجة زمن البقاء عليه.</p>
+          <span>العب الآن</span>
+        </a>
+        <a class="mode-card is-live" href="/ar/precision/">
+          <div class="mode-card-header">
+            <div class="mode-icon" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.2" /><circle cx="12" cy="12" r="5.4" /><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none" /></svg>
+            </div>
+            <h2>Precision</h2>
+          </div>
+          <p>أهداف صغيرة تصغر مع كل إصابة، بلا مكافأة سرعة.</p>
+          <span>العب الآن</span>
+        </a>
+        <a class="mode-card is-live" href="/ar/reaction/">
+          <div class="mode-card-header">
+            <div class="mode-icon mode-icon--reaction" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="13.4" r="7.6" /><path d="M12 9.6v4.2l2.8 1.7" /><path d="M9.4 2.8h5.2M12 2.8v2.2M18.8 6.6l1.4 1.4" /></svg>
+            </div>
+            <h2>زمن رد الفعل</h2>
+          </div>
+          <p>خمس محاولات: انتظر القرص ثم انقر عليه.</p>
+          <span>العب الآن</span>
+        </a>
+        <a class="mode-card is-live" href="/ar/cps/">
+          <div class="mode-card-header">
+            <div class="mode-icon" aria-hidden="true" focusable="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" /><path d="M12 4.2v2.2M12 17.6v2.2M4.2 12h2.2M17.6 12h2.2" /><path d="M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6" /></svg>
+            </div>
+            <h2>اختبار CPS</h2>
+          </div>
+          <p>نقرات في الثانية عبر 1 أو 5 أو 10 أو 30 أو 60 ثانية.</p>
+          <span>العب الآن</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — تدريب التصويب في المتصفح.</span>
+        <span>النتائج تُحفظ محلياً على هذا الجهاز.</span>
+      </div>
+    </footer>
+  </body>
+</html>

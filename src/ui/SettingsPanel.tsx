@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks';
 import type { TargetColorId, TargetShape, ThemeId } from '../engine/palette';
+import { t, type StringKey } from '../i18n';
 import {
   crosshairCursor,
   crosshairImage,
@@ -14,30 +15,30 @@ interface Props {
   onChange: (next: Settings) => void;
 }
 
-const THEME_LABELS: Array<[ThemeId, string]> = [
-  ['ink', 'Ink'],
-  ['graphite', 'Graphite'],
-  ['dusk', 'Dusk'],
+const THEMES: Array<[ThemeId, StringKey]> = [
+  ['ink', 'theme.ink'],
+  ['graphite', 'theme.graphite'],
+  ['dusk', 'theme.dusk'],
 ];
 
-const TARGET_COLORS: Array<[TargetColorId, string]> = [
-  ['frost', 'Frost'],
-  ['sand', 'Sand'],
-  ['mint', 'Mint'],
-  ['violet', 'Violet'],
+const TARGET_COLORS: Array<[TargetColorId, StringKey]> = [
+  ['frost', 'colour.frost'],
+  ['sand', 'colour.sand'],
+  ['mint', 'colour.mint'],
+  ['violet', 'colour.violet'],
 ];
 
-const TARGET_SHAPES: Array<[TargetShape, string]> = [
-  ['disc', 'Disc'],
-  ['ring', 'Ring'],
-  ['square', 'Square'],
+const TARGET_SHAPES: Array<[TargetShape, StringKey]> = [
+  ['disc', 'shape.disc'],
+  ['ring', 'shape.ring'],
+  ['square', 'shape.square'],
 ];
 
-const CROSSHAIR_SHAPES: Array<[CrosshairShape, string]> = [
-  ['cross', 'Cross'],
-  ['dot', 'Dot'],
-  ['circle', 'Circle'],
-  ['t', 'T'],
+const CROSSHAIR_SHAPES: Array<[CrosshairShape, StringKey]> = [
+  ['cross', 'crosshair.cross'],
+  ['dot', 'crosshair.dot'],
+  ['circle', 'crosshair.circle'],
+  ['t', 'crosshair.t'],
 ];
 
 export function SettingsPanel({ settings, onChange }: Props) {
@@ -56,46 +57,46 @@ export function SettingsPanel({ settings, onChange }: Props) {
     if (!shareCode) return;
     try {
       await navigator.clipboard.writeText(shareCode);
-      setStatus('Share code copied.');
+      setStatus(t('share.copied'));
     } catch {
-      setStatus('Copy blocked — select the code and copy it manually.');
+      setStatus(t('share.copyBlocked'));
     }
   };
 
   const applyCode = (): void => {
     const parsed = decodeShareCode(importCode);
     if (!parsed) {
-      setStatus('That code is not a valid FlickLab settings code.');
+      setStatus(t('share.invalid'));
       return;
     }
     onChange(parsed);
-    setStatus('Settings imported.');
+    setStatus(t('share.imported'));
   };
 
   return (
-    <section class="settings" aria-label="Settings" id="settings-panel">
+    <section class="settings" aria-label={t('settings.title')} id="settings-panel">
       <fieldset class="settings-group">
-        <legend>Field and target</legend>
+        <legend>{t('settings.fieldTarget')}</legend>
 
         <label class="field-row" for="set-theme">
-          <span>Theme</span>
+          <span>{t('settings.theme')}</span>
           <select
             id="set-theme"
             value={settings.theme}
             onChange={(event) => patch({ theme: event.currentTarget.value as ThemeId })}
           >
-            {THEME_LABELS.map(([value, label]) => (
+            {THEMES.map(([value, key]) => (
               <option key={value} value={value}>
-                {label}
+                {t(key)}
               </option>
             ))}
           </select>
         </label>
 
         <div class="field-row">
-          <span id="set-color-label">Target colour</span>
+          <span id="set-color-label">{t('settings.targetColour')}</span>
           <div class="seg" role="group" aria-labelledby="set-color-label">
-            {TARGET_COLORS.map(([value, label]) => (
+            {TARGET_COLORS.map(([value, key]) => (
               <button
                 key={value}
                 type="button"
@@ -103,16 +104,16 @@ export function SettingsPanel({ settings, onChange }: Props) {
                 aria-pressed={value === settings.targetColor}
                 onClick={() => patch({ targetColor: value })}
               >
-                {label}
+                {t(key)}
               </button>
             ))}
           </div>
         </div>
 
         <div class="field-row">
-          <span id="set-shape-label">Target shape</span>
+          <span id="set-shape-label">{t('settings.targetShape')}</span>
           <div class="seg" role="group" aria-labelledby="set-shape-label">
-            {TARGET_SHAPES.map(([value, label]) => (
+            {TARGET_SHAPES.map(([value, key]) => (
               <button
                 key={value}
                 type="button"
@@ -120,7 +121,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
                 aria-pressed={value === settings.targetShape}
                 onClick={() => patch({ targetShape: value })}
               >
-                {label}
+                {t(key)}
               </button>
             ))}
           </div>
@@ -128,7 +129,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
 
         <label class="field-row" for="set-scale">
           <span>
-            Target size <output>{Math.round(settings.targetScale * 100)}%</output>
+            {t('settings.targetSize')} <output>{Math.round(settings.targetScale * 100)}%</output>
           </span>
           <input
             id="set-scale"
@@ -143,12 +144,12 @@ export function SettingsPanel({ settings, onChange }: Props) {
       </fieldset>
 
       <fieldset class="settings-group">
-        <legend>Crosshair</legend>
+        <legend>{t('settings.crosshair')}</legend>
 
         <div
           class="crosshair-preview"
           role="img"
-          aria-label="Crosshair preview"
+          aria-label={t('settings.crosshairPreview')}
           style={{
             cursor: crosshairCursor(settings.crosshair),
             backgroundImage: `${crosshairImage(settings.crosshair)}, radial-gradient(circle at 50% 50%, rgba(61, 214, 245, 0.1), transparent 62%)`,
@@ -156,9 +157,9 @@ export function SettingsPanel({ settings, onChange }: Props) {
         />
 
         <div class="field-row">
-          <span id="set-xhair-label">Shape</span>
+          <span id="set-xhair-label">{t('settings.crosshairShape')}</span>
           <div class="seg" role="group" aria-labelledby="set-xhair-label">
-            {CROSSHAIR_SHAPES.map(([value, label]) => (
+            {CROSSHAIR_SHAPES.map(([value, key]) => (
               <button
                 key={value}
                 type="button"
@@ -166,7 +167,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
                 aria-pressed={value === settings.crosshair.shape}
                 onClick={() => patchCrosshair({ shape: value })}
               >
-                {label}
+                {t(key)}
               </button>
             ))}
           </div>
@@ -174,7 +175,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
 
         <label class="field-row" for="set-xhair-size">
           <span>
-            Size <output>{settings.crosshair.size}px</output>
+            {t('settings.size')} <output>{settings.crosshair.size}px</output>
           </span>
           <input
             id="set-xhair-size"
@@ -189,7 +190,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
 
         <label class="field-row" for="set-xhair-thickness">
           <span>
-            Thickness <output>{settings.crosshair.thickness}px</output>
+            {t('settings.thickness')} <output>{settings.crosshair.thickness}px</output>
           </span>
           <input
             id="set-xhair-thickness"
@@ -204,7 +205,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
 
         <label class="field-row" for="set-xhair-gap">
           <span>
-            Gap <output>{settings.crosshair.gap}px</output>
+            {t('settings.gap')} <output>{settings.crosshair.gap}px</output>
           </span>
           <input
             id="set-xhair-gap"
@@ -218,7 +219,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
         </label>
 
         <label class="field-row" for="set-xhair-color">
-          <span>Colour</span>
+          <span>{t('settings.colour')}</span>
           <input
             id="set-xhair-color"
             type="color"
@@ -229,7 +230,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
 
         <label class="field-row" for="set-xhair-opacity">
           <span>
-            Opacity <output>{Math.round(settings.crosshair.opacity * 100)}%</output>
+            {t('settings.opacity')} <output>{Math.round(settings.crosshair.opacity * 100)}%</output>
           </span>
           <input
             id="set-xhair-opacity"
@@ -249,16 +250,16 @@ export function SettingsPanel({ settings, onChange }: Props) {
             checked={settings.crosshair.outline}
             onChange={(event) => patchCrosshair({ outline: event.currentTarget.checked })}
           />
-          <span>Dark outline for bright fields</span>
+          <span>{t('settings.outline')}</span>
         </label>
       </fieldset>
 
       <fieldset class="settings-group">
-        <legend>Input and audio</legend>
+        <legend>{t('settings.inputAudio')}</legend>
 
         <label class="field-row" for="set-sensitivity">
           <span>
-            Sensitivity <output>{settings.sensitivity.toFixed(2)}×</output>
+            {t('settings.sensitivity')} <output>{settings.sensitivity.toFixed(2)}×</output>
           </span>
           <input
             id="set-sensitivity"
@@ -278,12 +279,12 @@ export function SettingsPanel({ settings, onChange }: Props) {
             checked={settings.pointerLock}
             onChange={(event) => patch({ pointerLock: event.currentTarget.checked })}
           />
-          <span>Pointer lock (raw mouse movement, Esc to release)</span>
+          <span>{t('settings.pointerLock')}</span>
         </label>
 
         <label class="field-row" for="set-volume">
           <span>
-            Volume <output>{Math.round(settings.volume * 100)}%</output>
+            {t('settings.volume')} <output>{Math.round(settings.volume * 100)}%</output>
           </span>
           <input
             id="set-volume"
@@ -303,7 +304,7 @@ export function SettingsPanel({ settings, onChange }: Props) {
             checked={settings.muted}
             onChange={(event) => patch({ muted: event.currentTarget.checked })}
           />
-          <span>Mute sound effects</span>
+          <span>{t('settings.mute')}</span>
         </label>
 
         <label class="check-row" for="set-motion">
@@ -313,25 +314,25 @@ export function SettingsPanel({ settings, onChange }: Props) {
             checked={settings.reducedMotion}
             onChange={(event) => patch({ reducedMotion: event.currentTarget.checked })}
           />
-          <span>Reduce motion (no particles or trails)</span>
+          <span>{t('settings.reduceMotion')}</span>
         </label>
       </fieldset>
 
       <fieldset class="settings-group settings-share">
-        <legend>Share settings</legend>
+        <legend>{t('settings.share')}</legend>
         <div class="share-row">
           <input
             type="text"
             readonly
             value={shareCode}
-            placeholder="Generate a code to copy your setup"
-            aria-label="Share code"
+            placeholder={t('share.placeholder')}
+            aria-label={t('share.codeLabel')}
           />
           <button type="button" class="ghost" onClick={() => setShareCode(encodeShareCode(settings))}>
-            Generate
+            {t('share.generate')}
           </button>
           <button type="button" class="ghost" onClick={() => void copyCode()} disabled={!shareCode}>
-            Copy
+            {t('share.copy')}
           </button>
         </div>
         <div class="share-row">
@@ -339,15 +340,15 @@ export function SettingsPanel({ settings, onChange }: Props) {
             type="text"
             value={importCode}
             placeholder="FL1..."
-            aria-label="Import share code"
+            aria-label={t('share.importLabel')}
             onInput={(event) => setImportCode(event.currentTarget.value)}
           />
           <button type="button" class="ghost" onClick={applyCode} disabled={!importCode.trim()}>
-            Apply code
+            {t('share.apply')}
           </button>
         </div>
         <p class="settings-status" role="status">
-          {status ?? 'Settings are stored in this browser only.'}
+          {status ?? t('share.stored')}
         </p>
       </fieldset>
     </section>

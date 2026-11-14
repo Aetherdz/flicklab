@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>تدريب Tracking — قياس زمن البقاء على الهدف | FlickLab</title>
+    <meta name="description" content="تدريب Tracking في المتصفح: أبقِ المؤشر داخل هدف متحرك، وتُحسب النتيجة من نسبة الوقت الذي بقي فيه المؤشر على الهدف." />
+    <link rel="canonical" href="https://flicklab.gg/ar/tracking/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/tracking/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/tracking/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/tracking/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="ar" />
+    <meta property="og:title" content="تدريب Tracking — زمن البقاء على هدف متحرك" />
+    <meta property="og:description" content="أبقِ المؤشر على هدف متحرك. النتيجة نسبة الوقت على الهدف." />
+    <meta property="og:url" content="https://flicklab.gg/ar/tracking/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-400-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-600-ar.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Tracking","url":"https://flicklab.gg/ar/tracking/","inLanguage":"ar","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"تدريب Tracking في المتصفح: أبقِ المؤشر داخل هدف متحرك، وتُحسب النتيجة من نسبة الوقت الذي بقي فيه المؤشر على الهدف.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/ar/"}},{"@type":"FAQPage","inLanguage":"ar","mainEntity":[{"@type":"Question","name":"كيف تُحسب نسبة التتبع؟","acceptedAnswer":{"@type":"Answer","text":"يقيس المحرك موضع المؤشر 240 مرة في الثانية ويقارن المسافة بينه وبين مركز الهدف؛ النسبة هي العينات التي كان فيها داخل الهدف مقسومة على العدد الكلي."}},{"@type":"Question","name":"لماذا لا تُحتسب النقرات؟","acceptedAnswer":{"@type":"Answer","text":"لأن التتبع مهارة استمرار لا اختيار. احتساب النقرات سيشجع على النقر بلا هدف ويفسد القياس."}},{"@type":"Question","name":"هل يتحسن التتبع بالتمرين؟","acceptedAnswer":{"@type":"Answer","text":"نعم، وهو من أسرع المهارات استجابة للتمرين المنتظم لأن التصحيح البصري يتعلمه الدماغ بسرعة. جلستان قصيرتان أسبوعياً تكفيان لرؤية فرق."}}]}]}</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/ar/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="القائمة الرئيسية">
+          <a href="/ar/tracking/" aria-current="page">Tracking</a>
+          <a href="/ar/">كل الأوضاع</a>
+                  <a
+          class="lang-switch"
+          href="/en/tracking/"
+          hreflang="en"
+          lang="en"
+          title="التبديل إلى الإنجليزية"
+          >English</a
+        >
+        </nav>
+      </div>
+    </header>
+
+    <main class="page" id="main">
+      <section class="mode-head">
+        <div class="mode-title">
+          <span class="mode-icon mode-icon--tracking" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 13c2.4-6 4.8-6 7.2 0s4.8 6 7.2 0 2.4-3.4 3.6-2.4" /><circle cx="13" cy="13" r="2.4" fill="currentColor" stroke="none" /></svg>
+          </span>
+          <h1>Tracking</h1>
+        </div>
+        <p class="lede">أبقِ المؤشر داخل هدف متحرك. لا تُحتسب النقرات هنا، بل الوقت الذي بقي فيه المؤشر على الهدف.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="tracking">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">سرعة عادية · 30 ثانية</p>
+            <button type="button" class="primary" data-play><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.1v13.8L19.2 12z" fill="currentColor" /></svg>ابدأ الجولة</button>
+            <p class="overlay-hint">بلا حساب وبلا تحميل. نتائجك تبقى على هذا الجهاز.</p>
+            <noscript>
+              <p class="overlay-hint">يحتاج FlickLab إلى JavaScript لتشغيل مدرب التصويب.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>ماذا يدرّب Tracking</h2>
+        <p>التتبع مهارة مستمرة لا لحظية. لا توجد نقرة تفصل الصح من الخطأ، بل سلسلة قرارات صغيرة كل إطار. هذا يجعلها أصعب في التقليد وأسهل في القياس: نسبة الوقت على الهدف رقم واحد لا يخفي شيئاً.</p>
+        <p>الهدف يتحرك بسرعة شبه ثابتة ويغيّر اتجاهه عند الحواف، والمسار مقصود ليكون قابلاً للقراءة. التمرين يقيس يدك لا عينك.</p>
+
+        <h2>كيف تُحسب النتيجة</h2>
+        <dl class="spec">
+          <div>
+            <dt>زمن البقاء</dt>
+            <dd>نسبة العينات التي كان المؤشر فيها داخل الهدف من أصل عينات الجولة.</dd>
+          </div>
+          <div>
+            <dt>النقاط</dt>
+            <dd>نسبة البقاء مضروبة في قيمة الصعوبة ثم في عشرة.</dd>
+          </div>
+          <div>
+            <dt>أطول بقاء</dt>
+            <dd>أطول مدة متصلة بقي فيها المؤشر داخل الهدف، بالثواني.</dd>
+          </div>
+          <div>
+            <dt>النقرات</dt>
+            <dd>تُسجَّل ولا تدخل في النتيجة.</dd>
+          </div>
+        </dl>
+
+        <h2>لماذا تبدو النسبة منخفضة</h2>
+        <p>نسبة 65% تتبع جيد. لأن الهدف يغيّر اتجاهه، فإن لحظات التصحيح تُحسب خارج الهدف ولا توجد طريقة لتجاوز ذلك. النسبة 100% تعني هدفاً بطيئاً أو ميداناً صغيراً، لا يداً سحرية.</p>
+        <p>راقب أطول بقاء متصل أكثر من النسبة الكلية: هو الذي يخبرك إن كانت المشكلة في التصحيح أم في الانقطاع.</p>
+
+        <h2>كيف تتدرب</h2>
+        <ul>
+          <li>انظر إلى الهدف لا إلى المؤشر؛ العين تقود اليد، وعكس ذلك يجعل التصحيح متأخراً.</li>
+          <li>حرّك المعصم بمدى صغير بدل تحريك الذراع كلها.</li>
+          <li>ابدأ بالسهل حتى تبلغ 70% ثم انتقل.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>أسئلة</h2>
+          <details>
+            <summary>كيف تُحسب نسبة التتبع؟</summary>
+            <p>يقيس المحرك موضع المؤشر 240 مرة في الثانية ويقارن المسافة بينه وبين مركز الهدف؛ النسبة هي العينات التي كان فيها داخل الهدف مقسومة على العدد الكلي.</p>
+          </details>
+          <details>
+            <summary>لماذا لا تُحتسب النقرات؟</summary>
+            <p>لأن التتبع مهارة استمرار لا اختيار. احتساب النقرات سيشجع على النقر بلا هدف ويفسد القياس.</p>
+          </details>
+          <details>
+            <summary>هل يتحسن التتبع بالتمرين؟</summary>
+            <p>نعم، وهو من أسرع المهارات استجابة للتمرين المنتظم لأن التصحيح البصري يتعلمه الدماغ بسرعة. جلستان قصيرتان أسبوعياً تكفيان لرؤية فرق.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — تدريب التصويب في المتصفح.</span>
+        <span>النتائج تُحفظ محلياً على هذا الجهاز.</span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -47,6 +47,7 @@ export interface AimPoint {
 }
 
 export interface HudProgress {
+  /** Translation key (`hud.*`); the shell resolves it for the page language. */
   label: string;
   value: string;
 }
