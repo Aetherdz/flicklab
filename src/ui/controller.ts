@@ -284,7 +284,8 @@ export class GameController {
   private handleTap(x: number, y: number, ts: number): void {
     const game = this.game;
     if (!game || game.state !== 'running') return;
-    if (!this.sfx.ready) this.sfx.unlock();
+    // Every tap is a user gesture: use it to create or resume the audio context.
+    this.sfx.unlock();
     game.tap(x, y, ts - this.origin);
   }
 
