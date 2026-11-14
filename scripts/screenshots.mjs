@@ -7,7 +7,7 @@
  *   pnpm dev --port 4173 --strictPort &
  *   node scripts/screenshots.mjs
  */
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { chromium } from '@playwright/test';
 
@@ -53,6 +53,48 @@ async function runSome(page) {
 async function shot(page, name) {
   await page.screenshot({ path: join(OUT, name), animations: 'disabled' });
   console.log(`wrote docs/screenshots/${name}`);
+}
+
+/** The README hero is a composition of the desktop and Arabic phone shots.
+ *  Rendering it in the browser keeps it reproducible without an image library. */
+async function composeHero(browser) {
+  const png = async (name) =>
+    `data:image/png;base64,${(await readFile(join(OUT, name))).toString('base64')}`;
+  const html = `<!doctype html>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      width: 1600px; height: 860px; overflow: hidden;
+      background: linear-gradient(#0b1119, #0e1822);
+      font: 0/0 a;
+    }
+    .glow {
+      position: absolute; inset: 6% 52% 6% 4%;
+      background: radial-gradient(closest-side, rgba(26, 44, 60, .95), rgba(26, 44, 60, 0));
+      filter: blur(40px);
+    }
+    .frame { position: absolute; border: 2px solid; overflow: hidden; }
+    .desktop {
+      left: 52px; top: 30px; width: 1150px; height: 799px;
+      border-color: #2c3642; border-radius: 14px;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .55);
+    }
+    .phone {
+      left: 1258px; top: 92px; width: 335px; height: 726px;
+      border-color: #3a4654; border-radius: 30px;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .6);
+    }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  </style>
+  <div class="glow"></div>
+  <div class="frame desktop"><img src="${await png('home-en.png')}" alt=""></div>
+  <div class="frame phone"><img src="${await png('home-ar-phone.png')}" alt=""></div>`;
+  const page = await browser.newPage({ viewport: { width: 1600, height: 860 }, deviceScaleFactor: 1 });
+  await page.setContent(html, { waitUntil: 'load' });
+  await page.screenshot({ path: join(OUT, 'hero.png') });
+  console.log('wrote docs/screenshots/hero.png');
+  await page.close();
 }
 
 const browser = await chromium.launch();
@@ -102,6 +144,8 @@ try {
     await shot(game, 'results-en.png');
     await game.close();
   }
+
+  if (want('hero')) await composeHero(browser);
 } finally {
   await browser.close();
 }

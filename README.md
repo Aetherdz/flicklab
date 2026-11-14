@@ -79,7 +79,7 @@ pnpm install
 pnpm dev            # http://localhost:5173 — host exposed for tunnels
 ```
 
-Requires Node 20+ and pnpm 9+ (the lockfile is pnpm).
+Requires Node `^20.19.0 || >=22.12.0` (Vite 8's engine range) and pnpm 9+ (lockfile v9).
 
 ```bash
 pnpm build          # regenerate pages, typecheck, bundle into dist/
