@@ -5,6 +5,8 @@
     "ogTitle": "Gridshot Aim Trainer — 3 Targets, 60 Seconds",
     "ogDescription": "Three targets, nine cells, instant respawn. Measure score, accuracy and time to target in the browser.",
     "h1": "Gridshot",
+    "name": "Gridshot",
+    "card": "Three targets on nine cells, instant respawn, sixty seconds.",
     "lede": "Three targets on a nine-cell grid. Every hit sends one of them somewhere new. Sixty seconds, no reloads, no hiding.",
     "preboot": "Normal targets · 60 seconds",
     "sections": [
@@ -18,10 +20,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["Score", "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten."],
-          ["Accuracy", "Every click counts, including clicks that land on an empty cell."],
-          ["Time to target", "Measured from the moment a target appears to the timestamp of the click that removes it, taken from the browser input event rather than a render frame."],
-          ["Streak", "Consecutive hits. One click on an empty cell resets it."]
+          [
+            "Score",
+            "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten."
+          ],
+          [
+            "Accuracy",
+            "Every click counts, including clicks that land on an empty cell."
+          ],
+          [
+            "Time to target",
+            "Measured from the moment a target appears to the timestamp of the click that removes it, taken from the browser input event rather than a render frame."
+          ],
+          [
+            "Streak",
+            "Consecutive hits. One click on an empty cell resets it."
+          ]
         ],
         "paragraphs": [
           "A fast but sloppy run and a slower accurate run can land in the same place, which is the point: the score is a single number standing in for two habits that pull against each other. Read accuracy before you read score."
@@ -44,9 +58,18 @@
       }
     ],
     "faq": [
-      ["Is this the same as Aim Lab or KovaaK's?", "No. Those are 3D trainers with weapon handling and imported scenarios. FlickLab is a browser trainer for short daily reps, with plain 2D geometry so the only thing being measured is your aim."],
-      ["What is a good Gridshot score?", "Compare against your own average for the same difficulty and duration, not against a stranger's. The score is built from hits and misses, so two very different runs can produce the same number."],
-      ["Does a gaming mouse matter?", "A wired mouse with a high polling rate removes one source of noise from the measurement. It will not fix accuracy; it only stops the hardware from hiding it."]
+      [
+        "Is this the same as Aim Lab or KovaaK's?",
+        "No. Those are 3D trainers with weapon handling and imported scenarios. FlickLab is a browser trainer for short daily reps, with plain 2D geometry so the only thing being measured is your aim."
+      ],
+      [
+        "What is a good Gridshot score?",
+        "Compare against your own average for the same difficulty and duration, not against a stranger's. The score is built from hits and misses, so two very different runs can produce the same number."
+      ],
+      [
+        "Does a gaming mouse matter?",
+        "A wired mouse with a high polling rate removes one source of noise from the measurement. It will not fix accuracy; it only stops the hardware from hiding it."
+      ]
     ]
   },
   "flick": {
@@ -55,6 +78,8 @@
     "ogTitle": "Flick Trainer — One Target, Measured Flick Time",
     "ogDescription": "One target, a new position after every hit, and a real flick time on every attempt.",
     "h1": "Flick",
+    "name": "Flick",
+    "card": "One target at a time. Every hit moves it somewhere new.",
     "lede": "One target, one jump, one click. Every hit moves the target somewhere it was not, and the clock runs from the moment it appeared.",
     "preboot": "Normal targets · 30 seconds",
     "sections": [
@@ -68,10 +93,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["Score", "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten."],
-          ["Time to target", "The interval between the target appearing and the timestamp of the click that removed it, taken from the pointer event rather than the render frame."],
-          ["Misses", "A click outside the live target counts as a miss, breaks the streak, and leaves the target where it is."],
-          ["Difficulty", "Target radius changes: Easy is roughly 1.9 times the Hard radius."]
+          [
+            "Score",
+            "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten."
+          ],
+          [
+            "Time to target",
+            "The interval between the target appearing and the timestamp of the click that removed it, taken from the pointer event rather than the render frame."
+          ],
+          [
+            "Misses",
+            "A click outside the live target counts as a miss, breaks the streak, and leaves the target where it is."
+          ],
+          [
+            "Difficulty",
+            "Target radius changes: Easy is roughly 1.9 times the Hard radius."
+          ]
         ],
         "paragraphs": [
           "A miss does not move the target. That is deliberate: you get to correct the same flick instead of paying for it with a brand-new position, so a run measures aim rather than luck."
@@ -94,9 +131,18 @@
       }
     ],
     "faq": [
-      ["How is Flick different from Gridshot?", "Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself."],
-      ["Why does a miss not move the target?", "So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position."],
-      ["Should I use pointer lock?", "It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes."]
+      [
+        "How is Flick different from Gridshot?",
+        "Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself."
+      ],
+      [
+        "Why does a miss not move the target?",
+        "So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position."
+      ],
+      [
+        "Should I use pointer lock?",
+        "It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes."
+      ]
     ]
   },
   "tracking": {
@@ -105,6 +151,8 @@
     "ogTitle": "Tracking Trainer — Time on Target",
     "ogDescription": "A target that never stops, and a score that is simply the share of time you stayed on it.",
     "h1": "Tracking",
+    "name": "Tracking",
+    "card": "Hold the cursor on a moving target; the score is time on target.",
     "lede": "The target does not wait for you. Hold the cursor inside it and the score is the time you managed to stay there.",
     "preboot": "Normal speed · 30 seconds",
     "sections": [
@@ -118,10 +166,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["On target", "The share of simulation samples where the cursor was inside the target. The simulation samples 240 times per second, independent of your frame rate."],
-          ["Score", "On-target percentage multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), then by ten."],
-          ["Time on target", "The same share expressed in seconds of the run."],
-          ["Clicks", "Clicks are ignored in this mode; the cursor position is the input."]
+          [
+            "On target",
+            "The share of simulation samples where the cursor was inside the target. The simulation samples 240 times per second, independent of your frame rate."
+          ],
+          [
+            "Score",
+            "On-target percentage multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), then by ten."
+          ],
+          [
+            "Time on target",
+            "The same share expressed in seconds of the run."
+          ],
+          [
+            "Clicks",
+            "Clicks are ignored in this mode; the cursor position is the input."
+          ]
         ]
       },
       {
@@ -141,9 +201,18 @@
       }
     ],
     "faq": [
-      ["Why do clicks not count?", "Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill."],
-      ["What is a good on-target percentage?", "Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed."],
-      ["Does the target follow the same path every run?", "With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it."]
+      [
+        "Why do clicks not count?",
+        "Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill."
+      ],
+      [
+        "What is a good on-target percentage?",
+        "Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed."
+      ],
+      [
+        "Does the target follow the same path every run?",
+        "With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it."
+      ]
     ]
   },
   "precision": {
@@ -152,6 +221,8 @@
     "ogTitle": "Precision Trainer — Shrinking Targets",
     "ogDescription": "Small targets that shrink with every hit. Accuracy is the only thing being scored.",
     "h1": "Precision",
+    "name": "Precision",
+    "card": "Targets that shrink with every hit, with no reward for speed.",
     "lede": "Small targets, and each hit makes the next one smaller. A miss gives the size back. Nothing here rewards clicking faster.",
     "preboot": "Normal targets · 30 seconds",
     "sections": [
@@ -165,10 +236,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["Score", "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten. Time is not part of the formula."],
-          ["Shrink", "Each hit reduces the radius by 4.5 percent, down to 55 percent of the starting size."],
-          ["Miss", "A click outside the target counts as a miss and restores the target to full size."],
-          ["Streak", "Consecutive hits. The streak is the clearest single number for this mode."]
+          [
+            "Score",
+            "Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten. Time is not part of the formula."
+          ],
+          [
+            "Shrink",
+            "Each hit reduces the radius by 4.5 percent, down to 55 percent of the starting size."
+          ],
+          [
+            "Miss",
+            "A click outside the target counts as a miss and restores the target to full size."
+          ],
+          [
+            "Streak",
+            "Consecutive hits. The streak is the clearest single number for this mode."
+          ]
         ]
       },
       {
@@ -188,9 +271,18 @@
       }
     ],
     "faq": [
-      ["How small do the targets get?", "Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius."],
-      ["Why does a miss restore the target size?", "So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets."],
-      ["Is this mode good for beginners?", "Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing."]
+      [
+        "How small do the targets get?",
+        "Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius."
+      ],
+      [
+        "Why does a miss restore the target size?",
+        "So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets."
+      ],
+      [
+        "Is this mode good for beginners?",
+        "Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing."
+      ]
     ]
   },
   "reaction": {
@@ -199,6 +291,8 @@
     "ogTitle": "Reaction Time Test — 5 Trials, Millisecond Timing",
     "ogDescription": "A disc appears after a random delay. Five trials, measured to the millisecond.",
     "h1": "Reaction time",
+    "name": "Reaction time",
+    "card": "Five trials: wait for the disc, click it, and the gap is measured.",
     "lede": "Five trials. Wait for the disc, click it, and the gap between the two is measured to the millisecond.",
     "preboot": "Five trials · normal signal",
     "sections": [
@@ -212,10 +306,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["Average reaction", "Mean of the valid trials, measured from the simulation step that revealed the disc to the pointer event timestamp of the click."],
-          ["Score", "100000 divided by the average reaction time in milliseconds, multiplied by the difficulty value."],
-          ["False start", "Clicking before the signal ends that trial with no reaction time recorded."],
-          ["Trials", "Five per run. The run ends when the fifth trial is finished; the duration selector does not apply."]
+          [
+            "Average reaction",
+            "Mean of the valid trials, measured from the simulation step that revealed the disc to the pointer event timestamp of the click."
+          ],
+          [
+            "Score",
+            "100000 divided by the average reaction time in milliseconds, multiplied by the difficulty value."
+          ],
+          [
+            "False start",
+            "Clicking before the signal ends that trial with no reaction time recorded."
+          ],
+          [
+            "Trials",
+            "Five per run. The run ends when the fifth trial is finished; the duration selector does not apply."
+          ]
         ]
       },
       {
@@ -235,9 +341,18 @@
       }
     ],
     "faq": [
-      ["What is a good reaction time?", "Typical adult visual reaction time is around 200 to 250 milliseconds on a computer. Under 200 ms is fast; under 170 ms usually means anticipation or a very favourable setup."],
-      ["Why five trials?", "Enough to average out one bad trial without turning the test into a stamina exercise. Five takes about fifteen seconds including the delays."],
-      ["Why is the delay random?", "A fixed delay can be predicted and clicked before the signal appears. Randomising it forces a genuine response."]
+      [
+        "What is a good reaction time?",
+        "Typical adult visual reaction time is around 200 to 250 milliseconds on a computer. Under 200 ms is fast; under 170 ms usually means anticipation or a very favourable setup."
+      ],
+      [
+        "Why five trials?",
+        "Enough to average out one bad trial without turning the test into a stamina exercise. Five takes about fifteen seconds including the delays."
+      ],
+      [
+        "Why is the delay random?",
+        "A fixed delay can be predicted and clicked before the signal appears. Randomising it forces a genuine response."
+      ]
     ]
   },
   "cps": {
@@ -246,6 +361,8 @@
     "ogTitle": "CPS Test — Clicks Per Second in the Browser",
     "ogDescription": "One pad, five durations, and a click rate measured without double-click bounce.",
     "h1": "CPS test",
+    "name": "CPS test",
+    "card": "Clicks per second across 1, 5, 10, 30 or 60 seconds.",
     "lede": "A click pad and a clock. Every click inside the pad counts; the score is the rate you sustain, not the burst you can produce once.",
     "preboot": "Normal pad · 10 seconds",
     "sections": [
@@ -259,10 +376,22 @@
       {
         "h2": "How scoring works",
         "spec": [
-          ["Score", "Clicks per second multiplied by 100 and by the difficulty value (Easy 1, Normal 1.5, Hard 2)."],
-          ["Duration", "1, 5, 10, 30 or 60 seconds. Short runs measure a burst; long runs measure a rate you can hold."],
-          ["Debounce", "Two clicks closer than 20 milliseconds apart are treated as one, which filters hardware double-click bounce without capping a real rate."],
-          ["Accuracy", "Clicks that land outside the pad count as misses."]
+          [
+            "Score",
+            "Clicks per second multiplied by 100 and by the difficulty value (Easy 1, Normal 1.5, Hard 2)."
+          ],
+          [
+            "Duration",
+            "1, 5, 10, 30 or 60 seconds. Short runs measure a burst; long runs measure a rate you can hold."
+          ],
+          [
+            "Debounce",
+            "Two clicks closer than 20 milliseconds apart are treated as one, which filters hardware double-click bounce without capping a real rate."
+          ],
+          [
+            "Accuracy",
+            "Clicks that land outside the pad count as misses."
+          ]
         ]
       },
       {
@@ -282,9 +411,18 @@
       }
     ],
     "faq": [
-      ["Does CPS matter for aim?", "Only for games where fire rate is limited by clicking. For tracking and flicking, the movement is the bottleneck, not the click."],
-      ["Why are two very fast clicks merged?", "Mechanical switches bounce, and a single physical click can produce two electrical events. The 20 ms floor removes that noise while still allowing up to 50 clicks per second."],
-      ["Why does the pad have a difficulty setting?", "It changes the pad size. A smaller pad requires a steadier hand at the same click rate, which makes the score multiplier meaningful."]
+      [
+        "Does CPS matter for aim?",
+        "Only for games where fire rate is limited by clicking. For tracking and flicking, the movement is the bottleneck, not the click."
+      ],
+      [
+        "Why are two very fast clicks merged?",
+        "Mechanical switches bounce, and a single physical click can produce two electrical events. The 20 ms floor removes that noise while still allowing up to 50 clicks per second."
+      ],
+      [
+        "Why does the pad have a difficulty setting?",
+        "It changes the pad size. A smaller pad requires a steadier hand at the same click rate, which makes the score multiplier meaningful."
+      ]
     ]
   }
 }

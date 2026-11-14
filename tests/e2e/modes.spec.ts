@@ -188,6 +188,20 @@ test('main page renders 6 mode cards with icons and filled CTA', async ({ page }
   // Check that there are 6 mode cards
   const modeCards = page.locator('.mode-card');
   await expect(modeCards).toHaveCount(6);
+
+  // Card and nav copy comes from content/*.json; a missing key used to render
+  // the literal word "undefined" on the shipped page.
+  const names = await page.locator('.mode-card h2').allTextContents();
+  expect(names).toHaveLength(6);
+  for (const name of names) {
+    expect(name.trim()).not.toBe('');
+    expect(name).not.toMatch(/undefined/);
+  }
+  const navLabels = await page.locator('.nav > a:not(.lang-switch)').allTextContents();
+  for (const label of navLabels) {
+    expect(label.trim()).not.toBe('');
+    expect(label).not.toMatch(/undefined/);
+  }
   
   // Check that each mode card has an icon
   for (let i = 0; i < 6; i++) {

@@ -12,12 +12,26 @@ import { join } from 'node:path';
 import { PRIMARY_CTA_ICON, MODE_ICONS } from './icons.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
-const SITE = 'https://flicklab.gg';
+/** Canonical origin baked into every page. Override it when the site is served
+ *  from another host (previews, a new domain) with SITE_URL=... */
+const SITE = (process.env.SITE_URL || 'https://flicklab.vercel.app').replace(/\/+$/, '');
 
 const ORDER = ['gridshot', 'flick', 'tracking', 'precision', 'reaction', 'cps'];
 const LOCALES = ['en', 'ar'];
 
 const read = async (path) => JSON.parse(await readFile(join(ROOT, path), 'utf8'));
+
+/** Card copy is required by the home page and the top navigation; a missing key
+ *  used to render the literal string "undefined", so it is a hard failure now. */
+const requireCard = (locale, slug, entry) => {
+  const missing = ['name', 'card'].filter((key) => typeof entry[key] !== 'string' || !entry[key]);
+  if (missing.length) {
+    console.error(`missing ${missing.join(' + ')} for ${locale}/${slug} in content/`);
+    process.exitCode = 1;
+    return false;
+  }
+  return true;
+};
 const siteCopy = await read('content/site.json');
 const modeCopy = { en: await read('content/modes.json'), ar: await read('content/modes.ar.json') };
 
@@ -417,6 +431,17 @@ ${footer(locale)}
 };
 
 let written = 0;
+
+// Validate the copy before touching disk so a bad entry cannot ship a page
+// with the literal string "undefined" in it.
+let invalid = false;
+for (const locale of LOCALES) {
+  for (const slug of ORDER) {
+    const entry = modeCopy[locale]?.[slug];
+    if (entry && !requireCard(locale, slug, entry)) invalid = true;
+  }
+}
+if (invalid) process.exit(1);
 
 for (const locale of LOCALES) {
   const modes = modeCopy[locale];
