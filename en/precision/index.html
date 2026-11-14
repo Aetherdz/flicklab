@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Precision Trainer — Shrinking Targets | FlickLab</title>
+    <meta name="description" content="Browser precision aim trainer: small targets that shrink with every hit, no speed bonus, and a miss restores full size. Measure accuracy, not click rate." />
+    <link rel="canonical" href="https://flicklab.gg/en/precision/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/precision/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/precision/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/precision/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="Precision Trainer — Shrinking Targets" />
+    <meta property="og:description" content="Small targets that shrink with every hit. Accuracy is the only thing being scored." />
+    <meta property="og:url" content="https://flicklab.gg/en/precision/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Precision","url":"https://flicklab.gg/en/precision/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser precision aim trainer: small targets that shrink with every hit, no speed bonus, and a miss restores full size. Measure accuracy, not click rate.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How small do the targets get?","acceptedAnswer":{"@type":"Answer","text":"Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius."}},{"@type":"Question","name":"Why does a miss restore the target size?","acceptedAnswer":{"@type":"Answer","text":"So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets."}},{"@type":"Question","name":"Is this mode good for beginners?","acceptedAnswer":{"@type":"Answer","text":"Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing."}}]}]}</script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/precision/" aria-current="page">Precision</a>
+          <a href="/en/">All modes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>Precision</h1>
+        <p class="lede">Small targets, and each hit makes the next one smaller. A miss gives the size back. Nothing here rewards clicking faster.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="precision">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Normal targets · 30 seconds</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What Precision trains</h2>
+        <p>Most aim training optimises the movement to the target. Precision optimises the last few pixels: the deceleration, the stop, the decision that the cursor is inside before the click happens. It is the part of aim that decides whether a fast flick becomes a hit or a near miss.</p>
+        <p>Because the target shrinks after every hit, the mode finds your limit instead of letting you sit below it. You keep hitting until the target is small enough that you cannot, and the score records how far you got.</p>
+
+        <h2>How scoring works</h2>
+        <dl class="spec">
+          <div>
+            <dt>Score</dt>
+            <dd>Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten. Time is not part of the formula.</dd>
+          </div>
+          <div>
+            <dt>Shrink</dt>
+            <dd>Each hit reduces the radius by 4.5 percent, down to 55 percent of the starting size.</dd>
+          </div>
+          <div>
+            <dt>Miss</dt>
+            <dd>A click outside the target counts as a miss and restores the target to full size.</dd>
+          </div>
+          <div>
+            <dt>Streak</dt>
+            <dd>Consecutive hits. The streak is the clearest single number for this mode.</dd>
+          </div>
+        </dl>
+
+        <h2>Why there is no speed bonus</h2>
+        <p>A speed bonus in a precision drill teaches the wrong lesson: it pays you for clicking before you are sure. Here the clock still runs, so a run is not unlimited, but the score itself only moves when a click lands inside the target.</p>
+        <p>That makes Precision the mode to use when your accuracy in the other modes is stalling. Ten minutes here usually moves the accuracy number in Gridshot and Flick without touching your speed at all.</p>
+
+        <h2>How to practise</h2>
+        <ul>
+          <li>Move to the target, stop, then click. Two distinct actions beat one blended guess.</li>
+          <li>Use the gap in your crosshair: the target should sit inside it, not under the arms.</li>
+          <li>When the streak breaks, slow down for the next three hits instead of trying to recover the streak immediately.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>How small do the targets get?</summary>
+            <p>Down to 55 percent of the starting radius. On Hard, the starting radius is already about a quarter of the Easy radius.</p>
+          </details>
+          <details>
+            <summary>Why does a miss restore the target size?</summary>
+            <p>So one bad click does not end the run's difficulty curve. The target stays where it is; only its size resets.</p>
+          </details>
+          <details>
+            <summary>Is this mode good for beginners?</summary>
+            <p>Yes, at Easy. It teaches the stop before the click, which is the habit most new players are missing.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

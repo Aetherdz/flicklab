@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { COUNTDOWN_MS, FIXED_STEP_MS, Game } from '../../src/engine/game';
+import { DEFAULT_APPEARANCE } from '../../src/engine/appearance';
 import { Rng } from '../../src/engine/rng';
 import type { RunConfig, World } from '../../src/engine/types';
 import { createMode } from '../../src/modes/registry';
@@ -17,7 +18,7 @@ function makeGame(overrides: Partial<RunConfig> = {}): Game {
   const world = { ...WORLD };
   return new Game({
     config,
-    mode: createMode(config, new Rng(config.seed), world),
+    mode: createMode(config, new Rng(config.seed), world, DEFAULT_APPEARANCE),
     world,
   });
 }

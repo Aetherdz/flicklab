@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Flick Trainer — One Target, Measured Flick Time | FlickLab</title>
+    <meta name="description" content="Browser flick trainer: one target at a time, a new position after every hit, and the time between appearance and click measured from the input event. 15, 30 or 60 second runs." />
+    <link rel="canonical" href="https://flicklab.gg/en/flick/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/flick/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/flick/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/flick/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="Flick Trainer — One Target, Measured Flick Time" />
+    <meta property="og:description" content="One target, a new position after every hit, and a real flick time on every attempt." />
+    <meta property="og:url" content="https://flicklab.gg/en/flick/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Flick","url":"https://flicklab.gg/en/flick/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser flick trainer: one target at a time, a new position after every hit, and the time between appearance and click measured from the input event. 15, 30 or 60 second runs.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is Flick different from Gridshot?","acceptedAnswer":{"@type":"Answer","text":"Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself."}},{"@type":"Question","name":"Why does a miss not move the target?","acceptedAnswer":{"@type":"Answer","text":"So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position."}},{"@type":"Question","name":"Should I use pointer lock?","acceptedAnswer":{"@type":"Answer","text":"It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes."}}]}]}</script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/flick/" aria-current="page">Flick</a>
+          <a href="/en/">All modes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>Flick</h1>
+        <p class="lede">One target, one jump, one click. Every hit moves the target somewhere it was not, and the clock runs from the moment it appeared.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="flick">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Normal targets · 30 seconds</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What Flick trains</h2>
+        <p>Gridshot asks you to choose between targets; Flick removes the choice. There is exactly one place to go, so the only variables left are how far your hand has to travel and how cleanly it stops. That makes it the cleanest measurement of a single flick in the browser.</p>
+        <p>Each target appears at least a fifth of the screen away from the last one, so a run cannot be completed with small wrist adjustments in one corner. You are always crossing distance, and you are always stopping.</p>
+
+        <h2>How scoring works</h2>
+        <p>A miss does not move the target. That is deliberate: you get to correct the same flick instead of paying for it with a brand-new position, so a run measures aim rather than luck.</p>
+        <dl class="spec">
+          <div>
+            <dt>Score</dt>
+            <dd>Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten.</dd>
+          </div>
+          <div>
+            <dt>Time to target</dt>
+            <dd>The interval between the target appearing and the timestamp of the click that removed it, taken from the pointer event rather than the render frame.</dd>
+          </div>
+          <div>
+            <dt>Misses</dt>
+            <dd>A click outside the live target counts as a miss, breaks the streak, and leaves the target where it is.</dd>
+          </div>
+          <div>
+            <dt>Difficulty</dt>
+            <dd>Target radius changes: Easy is roughly 1.9 times the Hard radius.</dd>
+          </div>
+        </dl>
+
+        <h2>Reading your numbers</h2>
+        <p>Time to target tells you how long the whole movement took. Accuracy tells you how often it ended inside the target. When both improve together, the speed is real. When only time improves, you are trading precision for movement and the next difficulty step will expose it.</p>
+        <p>The strongest signal in this mode is the shape of the distribution, not the average. If most flicks land near 220 ms and a handful take 600 ms, you are losing more to the outliers than to your base speed.</p>
+
+        <h2>How to practise</h2>
+        <ul>
+          <li>Start at 30 seconds. Long enough to establish a rhythm, short enough to stay sharp.</li>
+          <li>Let your eyes land on the target before the click. The click should confirm the stop, not create it.</li>
+          <li>Keep the same sensitivity for a week. Changing it mid-week makes every number incomparable.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>How is Flick different from Gridshot?</summary>
+            <p>Gridshot keeps three targets live, so you also practise target selection. Flick has one target and a guaranteed jump, so it isolates the movement itself.</p>
+          </details>
+          <details>
+            <summary>Why does a miss not move the target?</summary>
+            <p>So the mode measures your aim rather than the random layout. You can correct the same flick immediately instead of chasing a new position.</p>
+          </details>
+          <details>
+            <summary>Should I use pointer lock?</summary>
+            <p>It is optional. Pointer lock gives raw mouse movement, which is closer to a game engine's input path, but it hides the system cursor and takes a moment to get used to. The crosshair editor works in both modes.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

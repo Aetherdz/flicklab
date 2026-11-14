@@ -7,6 +7,7 @@ export interface FlicklabTestApi {
   start(opts?: { seed?: number; difficulty?: Difficulty; durationMs?: number }): void;
   advance(ms: number): void;
   tap(x: number, y: number, ts?: number): void;
+  move(x: number, y: number): void;
   targets(): AimPoint[];
   size(): { w: number; h: number };
   hud(): HudSnapshot;
@@ -53,6 +54,9 @@ function buildTestApi(get: () => GameController | null): FlicklabTestApi {
     tap(x, y, ts) {
       get()?.tapAt(x, y, ts);
     },
+    move(x, y) {
+      get()?.moveTo(x, y);
+    },
     targets() {
       return get()?.targets() ?? [];
     },
@@ -60,14 +64,17 @@ function buildTestApi(get: () => GameController | null): FlicklabTestApi {
       return get()?.canvasSize() ?? { w: 0, h: 0 };
     },
     hud() {
-      return get()?.lastHud ?? {
-        score: 0,
-        timeLeftMs: 0,
-        accuracy: 0,
-        hits: 0,
-        attempts: 0,
-        countdown: 0,
-      };
+      return (
+        get()?.lastHud ?? {
+          score: 0,
+          timeLeftMs: 0,
+          accuracy: 0,
+          hits: 0,
+          attempts: 0,
+          countdown: 0,
+          progress: null,
+        }
+      );
     },
     result() {
       return get()?.lastResult ?? null;

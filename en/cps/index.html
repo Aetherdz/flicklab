@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>CPS Test — Clicks Per Second in the Browser | FlickLab</title>
+    <meta name="description" content="Free CPS test with 1, 5, 10, 30 and 60 second runs. Clicks inside the pad count, clicks outside are misses, and hardware double-click bounce is ignored." />
+    <link rel="canonical" href="https://flicklab.gg/en/cps/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/cps/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/cps/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/cps/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="CPS Test — Clicks Per Second in the Browser" />
+    <meta property="og:description" content="One pad, five durations, and a click rate measured without double-click bounce." />
+    <meta property="og:url" content="https://flicklab.gg/en/cps/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — CPS test","url":"https://flicklab.gg/en/cps/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Free CPS test with 1, 5, 10, 30 and 60 second runs. Clicks inside the pad count, clicks outside are misses, and hardware double-click bounce is ignored.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does CPS matter for aim?","acceptedAnswer":{"@type":"Answer","text":"Only for games where fire rate is limited by clicking. For tracking and flicking, the movement is the bottleneck, not the click."}},{"@type":"Question","name":"Why are two very fast clicks merged?","acceptedAnswer":{"@type":"Answer","text":"Mechanical switches bounce, and a single physical click can produce two electrical events. The 20 ms floor removes that noise while still allowing up to 50 clicks per second."}},{"@type":"Question","name":"Why does the pad have a difficulty setting?","acceptedAnswer":{"@type":"Answer","text":"It changes the pad size. A smaller pad requires a steadier hand at the same click rate, which makes the score multiplier meaningful."}}]}]}</script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/cps/" aria-current="page">CPS test</a>
+          <a href="/en/">All modes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>CPS test</h1>
+        <p class="lede">A click pad and a clock. Every click inside the pad counts; the score is the rate you sustain, not the burst you can produce once.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="cps">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Normal pad · 10 seconds</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What this test measures</h2>
+        <p>Clicks per second is a hardware-and-hand metric, not an aim metric. It is here because click speed is a real input limit for some games and because it is useful to know your own number when a weapon's fire rate is faster than your finger.</p>
+        <p>The pad is a fixed square in the middle of the field. Clicks inside it count; clicks outside count as misses and lower accuracy. That keeps the test about a stable hand rather than about dragging the cursor around the screen.</p>
+
+        <h2>How scoring works</h2>
+        <dl class="spec">
+          <div>
+            <dt>Score</dt>
+            <dd>Clicks per second multiplied by 100 and by the difficulty value (Easy 1, Normal 1.5, Hard 2).</dd>
+          </div>
+          <div>
+            <dt>Duration</dt>
+            <dd>1, 5, 10, 30 or 60 seconds. Short runs measure a burst; long runs measure a rate you can hold.</dd>
+          </div>
+          <div>
+            <dt>Debounce</dt>
+            <dd>Two clicks closer than 20 milliseconds apart are treated as one, which filters hardware double-click bounce without capping a real rate.</dd>
+          </div>
+          <div>
+            <dt>Accuracy</dt>
+            <dd>Clicks that land outside the pad count as misses.</dd>
+          </div>
+        </dl>
+
+        <h2>Burst versus sustained</h2>
+        <p>A one-second run is a burst: most people can produce a much higher number for one second than for thirty. Neither number is wrong, but they answer different questions. If you care about a game where you hold fire, the 30 second number is the honest one.</p>
+        <p>The score weight is the same for every duration, so a 60-second run is not automatically worth more points. Compare like with like: the results chart groups runs by mode and difficulty, but not by duration, so keep the duration fixed when you are tracking progress.</p>
+
+        <h2>How to practise</h2>
+        <ul>
+          <li>Use a relaxed finger and let the switch reset. Tensing the forearm produces a fast first second and a slow rest of the run.</li>
+          <li>Keep the cursor still. Moving between clicks adds distance to every click and costs rate.</li>
+          <li>If you use a mechanical switch, note its actuation point; a shorter travel usually means a higher sustained rate.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>Does CPS matter for aim?</summary>
+            <p>Only for games where fire rate is limited by clicking. For tracking and flicking, the movement is the bottleneck, not the click.</p>
+          </details>
+          <details>
+            <summary>Why are two very fast clicks merged?</summary>
+            <p>Mechanical switches bounce, and a single physical click can produce two electrical events. The 20 ms floor removes that noise while still allowing up to 50 clicks per second.</p>
+          </details>
+          <details>
+            <summary>Why does the pad have a difficulty setting?</summary>
+            <p>It changes the pad size. A smaller pad requires a steadier hand at the same click rate, which makes the score multiplier meaningful.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

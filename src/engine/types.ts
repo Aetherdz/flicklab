@@ -24,6 +24,8 @@ export interface ModeResultCore {
   latencySum: number;
   latencyCount: number;
   bestStreak: number;
+  /** Fraction of sampled time the cursor was on target (tracking mode). */
+  onTargetRatio?: number;
 }
 
 export interface RunResult extends ModeResultCore {
@@ -44,6 +46,11 @@ export interface AimPoint {
   r: number;
 }
 
+export interface HudProgress {
+  label: string;
+  value: string;
+}
+
 /** One tap as it was applied to the simulation, relative to run start. */
 export interface TapRecord {
   t: number;
@@ -61,6 +68,10 @@ export interface ModeRuntime {
   tap(x: number, y: number, ts: number, elapsedMs: number): boolean;
   draw(ctx: CanvasRenderingContext2D, alpha: number): void;
   result(): ModeResultCore;
+  /** Ends the run early (trial-based modes such as reaction time). */
+  complete?(): boolean;
+  /** Mode-specific HUD cell instead of the generic timer. */
+  progress?(): HudProgress;
   /** Optional hook used by tests to aim at live targets. */
   aimPoints?(): AimPoint[];
 }

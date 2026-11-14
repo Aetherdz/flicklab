@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { Difficulty, ModeId } from '../engine/types';
+import type { Difficulty, ModeId, RunResult } from '../engine/types';
+import { MODE_META } from '../modes/registry';
+import { loadSettings, saveSettings, type Settings } from '../settings/model';
 import { personalBest } from '../stats/store';
 import {
   GameController,
@@ -7,6 +9,8 @@ import {
   type ResultPayload,
   type UiPhase,
 } from './controller';
+import { ProgressChart } from './ProgressChart';
+import { SettingsPanel } from './SettingsPanel';
 
 const DIFF_LABELS: Record<Difficulty, string> = {
   easy: 'Easy',
@@ -14,15 +18,14 @@ const DIFF_LABELS: Record<Difficulty, string> = {
   hard: 'Hard',
 };
 
-const DURATION_OPTIONS = [15, 30, 60] as const;
-
 const EMPTY_HUD: HudSnapshot = {
   score: 0,
-  timeLeftMs: 60_000,
+  timeLeftMs: 0,
   accuracy: 0,
   hits: 0,
   attempts: 0,
   countdown: 0,
+  progress: null,
 };
 
 export interface GameShellProps {
@@ -32,17 +35,22 @@ export interface GameShellProps {
 }
 
 export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) {
+  const meta = MODE_META[mode];
+  const initialDuration = meta.defaultDuration * 1000;
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const controllerRef = useRef<GameController | null>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
   const resultsHeading = useRef<HTMLHeadingElement>(null);
 
   const [phase, setPhase] = useState<UiPhase>('idle');
-  const [hud, setHud] = useState<HudSnapshot>(EMPTY_HUD);
+  const [hud, setHud] = useState<HudSnapshot>({ ...EMPTY_HUD, timeLeftMs: initialDuration });
   const [payload, setPayload] = useState<ResultPayload | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
-  const [durationMs, setDurationMs] = useState(60_000);
+  const [durationMs, setDurationMs] = useState(initialDuration);
   const [best, setBest] = useState<number | null>(null);
+  const [settings, setSettings] = useState<Settings>(loadSettings);
+  const [panelOpen, setPanelOpen] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,7 +58,8 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
     const controller = new GameController(canvas, {
       mode,
       difficulty: 'normal',
-      durationMs: 60_000,
+      durationMs: initialDuration,
+      settings,
       callbacks: {
         onPhase: setPhase,
         onHud: setHud,
@@ -64,7 +73,11 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
       controller.destroy();
       controllerRef.current = null;
     };
-  }, [mode, onReady, autoStart]);
+  }, [mode, onReady, autoStart, initialDuration]);
+
+  useEffect(() => {
+    controllerRef.current?.applySettings(settings);
+  }, [settings]);
 
   useEffect(() => {
     setBest(personalBest(mode, difficulty));
@@ -103,7 +116,9 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
 
   const beginRun = (controller: GameController): void => {
     setPayload(null);
-    stageRef.current?.scrollIntoView({ block: 'nearest' });
+    // Scroll the whole panel, not just the canvas: on a phone the rail holds
+    // the clock, and a run with no visible timer is unusable.
+    shellRef.current?.scrollIntoView({ block: 'nearest' });
     controller.start();
   };
 
@@ -119,6 +134,11 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
     controllerRef.current?.setDuration(seconds * 1000);
   };
 
+  const updateSettings = (next: Settings): void => {
+    setSettings(next);
+    saveSettings(next);
+  };
+
   const primaryAction = (): void => {
     const controller = controllerRef.current;
     if (!controller) return;
@@ -128,48 +148,68 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
 
   const locked = isLocked(phase);
   const timeLabel = formatClock(phase === 'idle' ? durationMs : hud.timeLeftMs);
+  const accuracyLabel = mode === 'tracking' ? 'On target' : 'Accuracy';
+  const hitsLabel = mode === 'cps' ? 'Clicks' : mode === 'tracking' ? 'On time' : 'Hits';
+  const hitsValue = mode === 'tracking' ? `${(hud.hits / 240).toFixed(1)}s` : String(hud.hits);
 
   return (
-    <div class="shell">
+    <div class="shell" ref={shellRef}>
       <div class="rail">
-        <div class="rail-block">
-          <span class="rail-label" id="difficulty-label">
-            Difficulty
-          </span>
-          <div class="seg" role="group" aria-labelledby="difficulty-label">
-            {(Object.keys(DIFF_LABELS) as Difficulty[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                class={key === difficulty ? 'seg-item is-on' : 'seg-item'}
-                aria-pressed={key === difficulty}
-                disabled={locked}
-                onClick={() => chooseDifficulty(key)}
-              >
-                {DIFF_LABELS[key]}
-              </button>
-            ))}
+        {meta.hasDifficulty && (
+          <div class="rail-block">
+            <span class="rail-label" id="difficulty-label">
+              Difficulty
+            </span>
+            <div class="seg" role="group" aria-labelledby="difficulty-label">
+              {(Object.keys(DIFF_LABELS) as Difficulty[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  class={key === difficulty ? 'seg-item is-on' : 'seg-item'}
+                  aria-pressed={key === difficulty}
+                  disabled={locked}
+                  onClick={() => chooseDifficulty(key)}
+                >
+                  {DIFF_LABELS[key]}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {meta.durations.length > 0 && (
+          <div class="rail-block">
+            <span class="rail-label" id="duration-label">
+              Duration
+            </span>
+            <div class="seg" role="group" aria-labelledby="duration-label">
+              {meta.durations.map((seconds) => (
+                <button
+                  key={seconds}
+                  type="button"
+                  class={seconds * 1000 === durationMs ? 'seg-item is-on' : 'seg-item'}
+                  aria-pressed={seconds * 1000 === durationMs}
+                  disabled={locked}
+                  onClick={() => chooseDuration(seconds)}
+                >
+                  {seconds}s
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div class="rail-block">
-          <span class="rail-label" id="duration-label">
-            Duration
-          </span>
-          <div class="seg" role="group" aria-labelledby="duration-label">
-            {DURATION_OPTIONS.map((seconds) => (
-              <button
-                key={seconds}
-                type="button"
-                class={seconds * 1000 === durationMs ? 'seg-item is-on' : 'seg-item'}
-                aria-pressed={seconds * 1000 === durationMs}
-                disabled={locked}
-                onClick={() => chooseDuration(seconds)}
-              >
-                {seconds}s
-              </button>
-            ))}
-          </div>
+          <span class="rail-label">Setup</span>
+          <button
+            type="button"
+            class="ghost rail-settings"
+            aria-expanded={panelOpen}
+            aria-controls="settings-panel"
+            onClick={() => setPanelOpen((open) => !open)}
+          >
+            {panelOpen ? 'Close settings' : 'Settings'}
+          </button>
         </div>
 
         <dl class="hud">
@@ -178,16 +218,16 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
             <dd>{hud.score}</dd>
           </div>
           <div class="hud-cell">
-            <dt>Time</dt>
-            <dd>{timeLabel}</dd>
+            <dt>{hud.progress?.label ?? 'Time'}</dt>
+            <dd>{hud.progress?.value ?? timeLabel}</dd>
           </div>
           <div class="hud-cell">
-            <dt>Accuracy</dt>
+            <dt>{accuracyLabel}</dt>
             <dd>{hud.attempts > 0 ? `${Math.round(hud.accuracy * 100)}%` : '--'}</dd>
           </div>
           <div class="hud-cell">
-            <dt>Hits</dt>
-            <dd>{hud.hits}</dd>
+            <dt>{hitsLabel}</dt>
+            <dd>{hitsValue}</dd>
           </div>
         </dl>
 
@@ -203,8 +243,10 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         </div>
       </div>
 
-      <div class="field" ref={stageRef}>
-        <canvas ref={canvasRef} class="field-canvas" aria-label="Gridshot playfield" />
+      {panelOpen && <SettingsPanel settings={settings} onChange={updateSettings} />}
+
+      <div class="field">
+        <canvas ref={canvasRef} class="field-canvas" aria-label={`${meta.label} playfield`} />
 
         {phase === 'countdown' && (
           <div class="overlay overlay-count" aria-live="assertive">
@@ -237,34 +279,12 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                 <span>score</span>
               </p>
               <dl class="results-grid">
-                <div>
-                  <dt>Accuracy</dt>
-                  <dd>{Math.round(payload.result.accuracy * 100)}%</dd>
-                </div>
-                <div>
-                  <dt>Hits</dt>
-                  <dd>{payload.result.hits}</dd>
-                </div>
-                <div>
-                  <dt>Misses</dt>
-                  <dd>{payload.result.misses}</dd>
-                </div>
-                <div>
-                  <dt>Avg time to target</dt>
-                  <dd>
-                    {payload.result.avgTimeToTarget === null
-                      ? '--'
-                      : `${Math.round(payload.result.avgTimeToTarget)} ms`}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Best streak</dt>
-                  <dd>{payload.result.bestStreak}</dd>
-                </div>
-                <div>
-                  <dt>Hits per second</dt>
-                  <dd>{payload.result.hitsPerSec.toFixed(2)}</dd>
-                </div>
+                {resultRows(mode, payload.result).map((row) => (
+                  <div key={row.label}>
+                    <dt>{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
+                ))}
               </dl>
               <p class="results-meta">
                 {metaLine(payload, best)}
@@ -280,6 +300,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                   class="ghost"
                   onClick={() => {
                     setPayload(null);
+                    setPanelOpen(true);
                     controllerRef.current?.reset();
                   }}
                 >
@@ -292,13 +313,72 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
       </div>
 
       <div class="field-foot">
-        <span>3 live targets · instant respawn</span>
+        <span>{meta.blurb}</span>
         <span class="keys-hint">
           <kbd>Enter</kbd> start · <kbd>R</kbd> restart · <kbd>Esc</kbd> pause
         </span>
       </div>
+
+      <div class="analysis">
+        <div class="analysis-head">
+          <span>Personal best</span>
+          <strong>{best ?? '--'}</strong>
+        </div>
+        <ProgressChart
+          mode={mode}
+          difficulty={difficulty}
+          revision={payload?.result.finishedAt ?? 0}
+        />
+      </div>
     </div>
   );
+}
+
+function resultRows(mode: ModeId, result: RunResult): Array<{ label: string; value: string }> {
+  switch (mode) {
+    case 'tracking':
+      return [
+        {
+          label: 'On target',
+          value: `${Math.round((result.onTargetRatio ?? result.accuracy) * 100)}%`,
+        },
+        {
+          label: 'Time on target',
+          value: `${((result.onTargetRatio ?? 0) * (result.durationMs / 1000)).toFixed(1)} s`,
+        },
+        { label: 'Best unbroken hold', value: `${(result.bestStreak / 240).toFixed(2)} s` },
+      ];
+    case 'reaction':
+      return [
+        {
+          label: 'Average reaction',
+          value: result.avgTimeToTarget === null ? '--' : `${Math.round(result.avgTimeToTarget)} ms`,
+        },
+        { label: 'Valid trials', value: `${result.hits}` },
+        { label: 'False starts', value: `${result.misses}` },
+      ];
+    case 'cps': {
+      const seconds = result.durationMs / 1000;
+      return [
+        { label: 'Clicks', value: `${result.hits}` },
+        { label: 'Clicks per second', value: (result.hits / seconds).toFixed(2) },
+        { label: 'Accuracy', value: `${Math.round(result.accuracy * 100)}%` },
+      ];
+    }
+    default:
+      return [
+        { label: 'Accuracy', value: `${Math.round(result.accuracy * 100)}%` },
+        { label: 'Hits', value: `${result.hits}` },
+        { label: 'Misses', value: `${result.misses}` },
+        {
+          label: 'Avg time to target',
+          value:
+            result.avgTimeToTarget === null ? '--' : `${Math.round(result.avgTimeToTarget)} ms`,
+        },
+        { label: 'Best streak', value: `${result.bestStreak}` },
+        { label: 'Hits per second', value: result.hitsPerSec.toFixed(2) },
+      ];
+  }
 }
 
 function isLocked(phase: UiPhase): boolean {

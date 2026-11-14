@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Reaction Time Test — 5 Trials, Millisecond Timing | FlickLab</title>
+    <meta name="description" content="Browser reaction time test: five trials with a random delay, measured from the input event timestamp. False starts are recorded separately from valid trials." />
+    <link rel="canonical" href="https://flicklab.gg/en/reaction/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/reaction/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/reaction/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/reaction/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="Reaction Time Test — 5 Trials, Millisecond Timing" />
+    <meta property="og:description" content="A disc appears after a random delay. Five trials, measured to the millisecond." />
+    <meta property="og:url" content="https://flicklab.gg/en/reaction/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Reaction time","url":"https://flicklab.gg/en/reaction/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser reaction time test: five trials with a random delay, measured from the input event timestamp. False starts are recorded separately from valid trials.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a good reaction time?","acceptedAnswer":{"@type":"Answer","text":"Typical adult visual reaction time is around 200 to 250 milliseconds on a computer. Under 200 ms is fast; under 170 ms usually means anticipation or a very favourable setup."}},{"@type":"Question","name":"Why five trials?","acceptedAnswer":{"@type":"Answer","text":"Enough to average out one bad trial without turning the test into a stamina exercise. Five takes about fifteen seconds including the delays."}},{"@type":"Question","name":"Why is the delay random?","acceptedAnswer":{"@type":"Answer","text":"A fixed delay can be predicted and clicked before the signal appears. Randomising it forces a genuine response."}}]}]}</script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/reaction/" aria-current="page">Reaction time</a>
+          <a href="/en/">All modes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>Reaction time</h1>
+        <p class="lede">Five trials. Wait for the disc, click it, and the gap between the two is measured to the millisecond.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="reaction">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Five trials · normal signal</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What this test measures</h2>
+        <p>Reaction time is the delay between a signal appearing and your response arriving at the browser. It is not the same as aim speed: a fast flick with a slow start loses to a slow flick with a fast start, and this mode isolates the second part.</p>
+        <p>The delay before each signal is seeded and random, between roughly 0.7 and 3.4 seconds depending on difficulty. A fixed delay would let you anticipate the signal and produce a number that is not reaction time at all.</p>
+
+        <h2>How scoring works</h2>
+        <dl class="spec">
+          <div>
+            <dt>Average reaction</dt>
+            <dd>Mean of the valid trials, measured from the simulation step that revealed the disc to the pointer event timestamp of the click.</dd>
+          </div>
+          <div>
+            <dt>Score</dt>
+            <dd>100000 divided by the average reaction time in milliseconds, multiplied by the difficulty value.</dd>
+          </div>
+          <div>
+            <dt>False start</dt>
+            <dd>Clicking before the signal ends that trial with no reaction time recorded.</dd>
+          </div>
+          <div>
+            <dt>Trials</dt>
+            <dd>Five per run. The run ends when the fifth trial is finished; the duration selector does not apply.</dd>
+          </div>
+        </dl>
+
+        <h2>Reading the result honestly</h2>
+        <p>A single run is noisy. Five trials give a usable average, but the difference between 210 ms and 230 ms in one session is usually posture, sleep and attention rather than a change in ability. Compare weekly averages, not run-to-run numbers.</p>
+        <p>False starts are worth watching. One is normal; three in a row means you are predicting the delay instead of waiting for the signal, and the average you get from the remaining trials is not trustworthy.</p>
+
+        <h2>How to practise</h2>
+        <ul>
+          <li>Rest your hand on the mouse, not above it. Movement before the signal is time you cannot measure.</li>
+          <li>Look at the centre of the field, not at the cursor. The signal appears there, and peripheral vision is enough for the click.</li>
+          <li>Run the test at the same time of day when you compare results.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>What is a good reaction time?</summary>
+            <p>Typical adult visual reaction time is around 200 to 250 milliseconds on a computer. Under 200 ms is fast; under 170 ms usually means anticipation or a very favourable setup.</p>
+          </details>
+          <details>
+            <summary>Why five trials?</summary>
+            <p>Enough to average out one bad trial without turning the test into a stamina exercise. Five takes about fifteen seconds including the delays.</p>
+          </details>
+          <details>
+            <summary>Why is the delay random?</summary>
+            <p>A fixed delay can be predicted and clicked before the signal appears. Randomising it forces a genuine response.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

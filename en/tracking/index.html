@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tracking Trainer — Time on Target | FlickLab</title>
+    <meta name="description" content="Browser tracking aim trainer: keep the cursor inside a moving target and get scored on the share of time you stay on it. 15, 30 or 60 second runs at three speeds." />
+    <link rel="canonical" href="https://flicklab.gg/en/tracking/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/tracking/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/tracking/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/tracking/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="Tracking Trainer — Time on Target" />
+    <meta property="og:description" content="A target that never stops, and a score that is simply the share of time you stayed on it." />
+    <meta property="og:url" content="https://flicklab.gg/en/tracking/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — Tracking","url":"https://flicklab.gg/en/tracking/","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Browser tracking aim trainer: keep the cursor inside a moving target and get scored on the share of time you stay on it. 15, 30 or 60 second runs at three speeds.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.gg/en/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do clicks not count?","acceptedAnswer":{"@type":"Answer","text":"Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill."}},{"@type":"Question","name":"What is a good on-target percentage?","acceptedAnswer":{"@type":"Answer","text":"Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed."}},{"@type":"Question","name":"Does the target follow the same path every run?","acceptedAnswer":{"@type":"Answer","text":"With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it."}}]}]}</script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/tracking/" aria-current="page">Tracking</a>
+          <a href="/en/">All modes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>Tracking</h1>
+        <p class="lede">The target does not wait for you. Hold the cursor inside it and the score is the time you managed to stay there.</p>
+      </section>
+
+      <div class="shell" data-game data-mode="tracking">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Normal speed · 30 seconds</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What Tracking trains</h2>
+        <p>Flicking is a discrete movement with a clear end. Tracking is a continuous correction with no end at all, and it fails differently: the cursor overshoots, then over-corrects, then oscillates around the target while the target keeps moving. That oscillation is the habit this mode exposes.</p>
+        <p>The measurement is unforgiving in a useful way. There is no partial credit for being close, and no click to reset the situation. Either the cursor is inside the target at that instant or it is not.</p>
+
+        <h2>How scoring works</h2>
+        <dl class="spec">
+          <div>
+            <dt>On target</dt>
+            <dd>The share of simulation samples where the cursor was inside the target. The simulation samples 240 times per second, independent of your frame rate.</dd>
+          </div>
+          <div>
+            <dt>Score</dt>
+            <dd>On-target percentage multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), then by ten.</dd>
+          </div>
+          <div>
+            <dt>Time on target</dt>
+            <dd>The same share expressed in seconds of the run.</dd>
+          </div>
+          <div>
+            <dt>Clicks</dt>
+            <dd>Clicks are ignored in this mode; the cursor position is the input.</dd>
+          </div>
+        </dl>
+
+        <h2>Speed, not size</h2>
+        <p>Difficulty changes how fast the target travels, not how large it is. A slower target with a small radius rewards precision; a fast target with a normal radius rewards prediction. Both are useful, but they teach different things, and mixing them up makes progress hard to see.</p>
+        <p>The path is generated from the run seed, so two runs at the same difficulty and seed follow the same route. That makes it possible to compare attempts fairly instead of guessing whether the target was simply easier this time.</p>
+
+        <h2>How to practise</h2>
+        <ul>
+          <li>Lower your sensitivity before you try to be smooth. Most tracking errors are corrections that arrive too large.</li>
+          <li>Aim at where the target is going, not where it is. The cursor should arrive as the target does.</li>
+          <li>Stop when your forearm burns. Tracking quality drops sharply with tension, and the score follows.</li>
+        </ul>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>Why do clicks not count?</summary>
+            <p>Tracking is a position task. Adding clicks would let a player pause the cursor and convert it into a flick drill, which is a different skill.</p>
+          </details>
+          <details>
+            <summary>What is a good on-target percentage?</summary>
+            <p>Above 60 percent at Normal is a solid starting point, and above 75 percent is strong. The absolute number matters less than whether it rises across a week at the same speed.</p>
+          </details>
+          <details>
+            <summary>Does the target follow the same path every run?</summary>
+            <p>With the same seed, yes. The seed is shown on the results screen, and the layout is generated deterministically from it.</p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

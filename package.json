@@ -5,14 +5,15 @@
   "type": "module",
   "description": "Browser aim trainer with seed-verifiable runs, bilingual AR/EN.",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc --noEmit && vite build",
+    "dev": "node scripts/gen-pages.mjs && vite --host",
+    "build": "node scripts/gen-pages.mjs && tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "fonts": "node scripts/fetch-fonts.mjs"
+    "fonts": "node scripts/fetch-fonts.mjs",
+    "pages": "node scripts/gen-pages.mjs"
   },
   "dependencies": {
     "preact": "^11.2.0"

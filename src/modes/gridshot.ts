@@ -1,6 +1,10 @@
+import type { Appearance } from '../engine/appearance';
+import { HIT_COLOR } from '../engine/palette';
 import { Pool } from '../engine/pool';
 import type { Rng } from '../engine/rng';
-import { DIFFICULTY_SCORE_MULTIPLIER, PALETTE, TARGET_RADIUS } from '../engine/theme';
+import { hitTarget } from '../engine/targets';
+import { drawTarget } from '../engine/targets';
+import { DIFFICULTY_SCORE_MULTIPLIER, TARGET_RADIUS } from '../engine/theme';
 import type {
   AimPoint,
   Difficulty,
@@ -65,12 +69,13 @@ export class Gridshot implements ModeRuntime {
   private latencyCount = 0;
 
   constructor(
-    config: RunConfig,
+    _config: RunConfig,
     private readonly rng: Rng,
     private readonly world: World,
+    private readonly look: Appearance,
   ) {
-    this.radiusScale = TARGET_RADIUS[config.difficulty as Difficulty];
-    this.multiplier = DIFFICULTY_SCORE_MULTIPLIER[config.difficulty as Difficulty];
+    this.radiusScale = TARGET_RADIUS[_config.difficulty as Difficulty];
+    this.multiplier = DIFFICULTY_SCORE_MULTIPLIER[_config.difficulty as Difficulty];
     for (let i = 0; i < CELLS; i++) {
       this.slots.push({ active: false, spawnTs: 0 });
     }
@@ -107,6 +112,11 @@ export class Gridshot implements ModeRuntime {
   }
 
   update(dtMs: number, _elapsedMs: number, _cursorX: number, _cursorY: number): void {
+    if (this.look.reducedMotion) {
+      this.sparks.clear();
+      this.markers.clear();
+      return;
+    }
     const dt = dtMs / 1000;
     for (const spark of this.sparks.items) {
       if (!spark.active) continue;
@@ -154,14 +164,13 @@ export class Gridshot implements ModeRuntime {
     const size = Math.min(w, h) * GRID_FRACTION;
     const originX = (w - size) / 2;
     const originY = (h - size) / 2;
+    const theme = this.look.theme;
 
-    ctx.fillStyle = PALETTE.field;
+    ctx.fillStyle = theme.field;
     ctx.fillRect(0, 0, w, h);
 
-    // Grid: cell separators plus corner ticks, drawn as instrument registration
-    // marks rather than decoration.
     const pitch = size / GRID;
-    ctx.strokeStyle = PALETTE.grid;
+    ctx.strokeStyle = theme.grid;
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let i = 1; i < GRID; i++) {
@@ -174,7 +183,7 @@ export class Gridshot implements ModeRuntime {
     }
     ctx.stroke();
 
-    ctx.strokeStyle = PALETTE.gridStrong;
+    ctx.strokeStyle = theme.gridStrong;
     ctx.beginPath();
     const tick = Math.min(18, pitch * 0.14);
     for (const [cx, cy] of [
@@ -192,13 +201,15 @@ export class Gridshot implements ModeRuntime {
     }
     ctx.stroke();
 
-    const radius = size * this.radiusScale;
+    const radius = size * this.radiusScale * this.look.targetScale;
     for (let cell = 0; cell < CELLS; cell++) {
-      const slot = this.slots[cell] as Slot;
-      if (!slot.active) continue;
+      if (!(this.slots[cell] as Slot).active) continue;
       const px = originX + (CELL_NX[cell] as number) * size;
       const py = originY + (CELL_NY[cell] as number) * size;
-      this.drawTarget(ctx, px, py, radius);
+      drawTarget(ctx, px, py, radius, {
+        ...this.look.target,
+        shape: this.look.shape,
+      });
     }
 
     ctx.lineWidth = 1.5;
@@ -206,7 +217,7 @@ export class Gridshot implements ModeRuntime {
       if (!marker.active) continue;
       const progress = 1 - marker.life / marker.ttl;
       ctx.globalAlpha = 1 - progress;
-      ctx.strokeStyle = PALETTE.hit;
+      ctx.strokeStyle = HIT_COLOR;
       ctx.beginPath();
       ctx.arc(marker.x, marker.y, marker.radius * (1 + progress * 1.6), 0, Math.PI * 2);
       ctx.stroke();
@@ -215,9 +226,8 @@ export class Gridshot implements ModeRuntime {
     ctx.globalAlpha = 1;
     for (const spark of this.sparks.items) {
       if (!spark.active) continue;
-      const a = Math.min(1, spark.life / spark.ttl);
-      ctx.globalAlpha = a;
-      ctx.fillStyle = PALETTE.hit;
+      ctx.globalAlpha = Math.min(1, spark.life / spark.ttl);
+      ctx.fillStyle = HIT_COLOR;
       ctx.fillRect(spark.x - 1.5, spark.y - 1.5, 3, 3);
     }
     ctx.globalAlpha = 1;
@@ -240,7 +250,7 @@ export class Gridshot implements ModeRuntime {
     const size = Math.min(w, h) * GRID_FRACTION;
     const originX = (w - size) / 2;
     const originY = (h - size) / 2;
-    const r = size * this.radiusScale;
+    const r = size * this.radiusScale * this.look.targetScale;
     const points: AimPoint[] = [];
     for (let cell = 0; cell < CELLS; cell++) {
       if (!(this.slots[cell] as Slot).active) continue;
@@ -253,35 +263,8 @@ export class Gridshot implements ModeRuntime {
     return points;
   }
 
-  private drawTarget(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    r: number,
-  ): void {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = PALETTE.target;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.strokeStyle = PALETTE.targetRing;
-    ctx.lineWidth = Math.max(2, r * 0.09);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x, y, r * 0.42, 0, Math.PI * 2);
-    ctx.fillStyle = PALETTE.targetInner;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(1.6, r * 0.09), 0, Math.PI * 2);
-    ctx.fillStyle = PALETTE.targetRing;
-    ctx.fill();
-  }
-
   private emitHit(x: number, y: number): void {
+    if (this.look.reducedMotion) return;
     const marker = this.markers.acquire();
     if (marker) {
       marker.x = x;
@@ -311,12 +294,12 @@ export class Gridshot implements ModeRuntime {
     const size = Math.min(w, h) * GRID_FRACTION;
     const originX = (w - size) / 2;
     const originY = (h - size) / 2;
-    const r = size * this.radiusScale;
+    const r = size * this.radiusScale * this.look.targetScale;
     for (let cell = 0; cell < CELLS; cell++) {
       if (!(this.slots[cell] as Slot).active) continue;
-      const dx = originX + (CELL_NX[cell] as number) * size - x;
-      const dy = originY + (CELL_NY[cell] as number) * size - y;
-      if (dx * dx + dy * dy <= r * r) return cell;
+      const px = originX + (CELL_NX[cell] as number) * size;
+      const py = originY + (CELL_NY[cell] as number) * size;
+      if (hitTarget(px, py, r, x, y)) return cell;
     }
     return -1;
   }

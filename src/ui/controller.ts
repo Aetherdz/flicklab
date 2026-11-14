@@ -1,3 +1,4 @@
+import { resolveAppearance, type Appearance } from '../engine/appearance';
 import { Sfx } from '../engine/audio';
 import { Surface } from '../engine/canvas';
 import { FIXED_STEP_MS } from '../engine/constants';
@@ -5,8 +6,16 @@ import { Game, type GameState } from '../engine/game';
 import { PointerInput } from '../engine/input';
 import { Loop } from '../engine/loop';
 import { Rng } from '../engine/rng';
-import type { AimPoint, Difficulty, ModeId, RunConfig, RunResult } from '../engine/types';
+import type {
+  AimPoint,
+  Difficulty,
+  HudProgress,
+  ModeId,
+  RunConfig,
+  RunResult,
+} from '../engine/types';
 import { createMode } from '../modes/registry';
+import { crosshairCursor, defaultSettings, type Settings } from '../settings/model';
 import { saveRun } from '../stats/store';
 
 export type UiPhase = 'idle' | 'countdown' | 'playing' | 'paused' | 'finished';
@@ -18,6 +27,7 @@ export interface HudSnapshot {
   hits: number;
   attempts: number;
   countdown: number;
+  progress: HudProgress | null;
 }
 
 export interface ResultPayload {
@@ -39,10 +49,19 @@ export interface ControllerOptions {
   callbacks: ControllerCallbacks;
   /** Manual mode is used by tests: the loop never runs, advance() drives it. */
   manual?: boolean;
-  sensitivity?: number;
+  settings?: Settings;
+  onPointerLock?: (locked: boolean) => void;
 }
 
-const EMPTY_HUD: HudSnapshot = { score: 0, timeLeftMs: 0, accuracy: 0, hits: 0, attempts: 0, countdown: 0 };
+const EMPTY_HUD: HudSnapshot = {
+  score: 0,
+  timeLeftMs: 0,
+  accuracy: 0,
+  hits: 0,
+  attempts: 0,
+  countdown: 0,
+  progress: null,
+};
 
 export function randomSeed(): number {
   const buf = new Uint32Array(1);
@@ -65,6 +84,7 @@ export class GameController {
   private readonly manual: boolean;
 
   private game: Game | null = null;
+  private readonly look: Appearance;
   private idleGame: Game | null = null;
   private phase: UiPhase = 'idle';
   private origin = 0;
@@ -77,6 +97,7 @@ export class GameController {
 
   difficulty: Difficulty;
   durationMs: number;
+  settings: Settings;
 
   constructor(canvas: HTMLCanvasElement, opts: ControllerOptions) {
     this.mode = opts.mode;
@@ -84,6 +105,14 @@ export class GameController {
     this.durationMs = opts.durationMs;
     this.callbacks = opts.callbacks;
     this.manual = opts.manual ?? false;
+    this.settings = opts.settings ?? defaultSettings();
+    this.look = resolveAppearance(
+      this.settings.theme,
+      this.settings.targetColor,
+      this.settings.targetShape,
+      this.settings.targetScale,
+      this.settings.reducedMotion,
+    );
 
     this.surface = new Surface(canvas);
     this.input = new PointerInput(
@@ -92,8 +121,13 @@ export class GameController {
         onTap: (x, y, ts) => this.handleTap(x, y, ts),
         onMove: (x, y) => this.game?.setCursor(x, y),
       },
-      { sensitivity: opts.sensitivity ?? 1 },
+      {
+        sensitivity: this.settings.sensitivity,
+        lock: this.settings.pointerLock,
+        onLockChange: opts.onPointerLock,
+      },
     );
+    this.applySettings(this.settings);
 
     this.surface.onResize(() => {
       const { cssW, cssH } = this.surface.view;
@@ -138,6 +172,34 @@ export class GameController {
     this.input.setSensitivity(value);
   }
 
+  /**
+   * Applies a full settings object. Appearance is a shared mutable record, so
+   * a theme or target change is visible in the current preview and in the next
+   * run without rebuilding the mode.
+   */
+  applySettings(next: Settings): void {
+    this.settings = next;
+    const resolved = resolveAppearance(
+      next.theme,
+      next.targetColor,
+      next.targetShape,
+      next.targetScale,
+      next.reducedMotion,
+    );
+    this.look.theme = resolved.theme;
+    this.look.target = resolved.target;
+    this.look.shape = resolved.shape;
+    this.look.targetScale = resolved.targetScale;
+    this.look.reducedMotion = resolved.reducedMotion;
+
+    this.surface.canvas.style.cursor = crosshairCursor(next.crosshair);
+    this.input.setSensitivity(next.sensitivity);
+    this.input.setLock(next.pointerLock);
+    this.sfx.setVolume(next.volume);
+    this.sfx.setMuted(next.muted);
+    this.draw();
+  }
+
   start(seed?: number): void {
     if (this.destroyed) return;
     const config: RunConfig = {
@@ -150,7 +212,7 @@ export class GameController {
     const rng = new Rng(config.seed);
     const game = new Game({
       config,
-      mode: createMode(config, rng, world),
+      mode: createMode(config, rng, world, this.look),
       world,
       onSfx: (name) => this.sfx.play(name),
     });
@@ -204,6 +266,11 @@ export class GameController {
     this.publishHud(true);
   }
 
+  /** Moves the simulated cursor without a pointer event. Used by tests. */
+  moveTo(x: number, y: number): void {
+    this.game?.setCursor(x, y);
+  }
+
   tapAt(x: number, y: number, tsRel?: number): void {
     const game = this.game;
     if (!game || game.state !== 'running') return;
@@ -248,7 +315,7 @@ export class GameController {
     const world = { w: cssW, h: cssH };
     const game = new Game({
       config,
-      mode: createMode(config, new Rng(config.seed), world),
+      mode: createMode(config, new Rng(config.seed), world, this.look),
       world,
     });
     game.runtime.begin();
@@ -314,6 +381,7 @@ export class GameController {
       hits: core.hits,
       attempts,
       countdown: game.state === 'countdown' ? Math.ceil(game.countdownRemainingMs / 1000) : 0,
+      progress: game.runtime.progress?.() ?? null,
     };
     this.lastHud = hud;
     this.callbacks.onHud(hud);

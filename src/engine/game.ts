@@ -126,7 +126,7 @@ export class Game {
     this.mode.update(FIXED_STEP_MS, elapsed, this.cursorX, this.cursorY);
     this.steps++;
 
-    if (this.elapsedMs >= this.config.durationMs) {
+    if (this.mode.complete?.() || this.elapsedMs >= this.config.durationMs) {
       this.state = 'finished';
       this.onSfx?.('finish');
     }

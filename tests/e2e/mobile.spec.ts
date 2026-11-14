@@ -25,3 +25,23 @@ test('taps register on touch and do not scroll the page', async ({ page }) => {
   expect(hud.hits).toBe(1);
   expect(await page.evaluate(() => window.scrollY)).toBe(scrollBefore);
 });
+
+test('starting a run keeps the clock and the whole field on screen', async ({ page }) => {
+  await page.goto('/en/gridshot/?test=1');
+  await page.waitForFunction(() => Boolean(window.__fl));
+
+  await page.getByRole('button', { name: 'Start run' }).click();
+  await page.evaluate(() => window.__fl!.advance(3200));
+  await expect.poll(() => page.evaluate(() => window.__fl!.phase())).toBe('playing');
+
+  const layout = await page.evaluate(() => {
+    const hud = document.querySelector('.hud')!.getBoundingClientRect();
+    const field = document.querySelector('.field')!.getBoundingClientRect();
+    return { hudTop: hud.top, fieldTop: field.top, fieldBottom: field.bottom, viewport: innerHeight };
+  });
+
+  // The rail carries the clock, so both it and the playfield must be visible.
+  expect(layout.hudTop).toBeGreaterThanOrEqual(0);
+  expect(layout.fieldTop).toBeGreaterThanOrEqual(0);
+  expect(layout.fieldBottom).toBeLessThanOrEqual(layout.viewport + 1);
+});
