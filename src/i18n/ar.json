@@ -133,5 +133,14 @@
   "mode.reaction.label": "زمن رد الفعل",
   "mode.reaction.blurb": "خمس محاولات: انتظر القرص ثم انقر عليه.",
   "mode.cps.label": "اختبار CPS",
-  "mode.cps.blurb": "نقرات في الثانية داخل لوحة ثابتة."
+  "mode.cps.blurb": "نقرات في الثانية داخل لوحة ثابتة.",
+
+  "rail.fullscreen": "ملء الشاشة",
+  "rail.exitFullscreen": "إنهاء ملء الشاشة",
+  "keys.fullscreen": "ملء الشاشة",
+  "results.shareCard": "مشاركة البطاقة",
+  "results.copyLink": "نسخ رابط الإعادة",
+  "results.linkCopied": "تم نسخ رابط الإعادة",
+  "results.copyBlocked": "النسخ محظور — حدّد الرابط وانسخه يدوياً",
+  "results.shareFailed": "تعذّر إنشاء البطاقة"
 }

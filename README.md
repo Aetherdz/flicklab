@@ -4,16 +4,26 @@ Browser aim trainer built around measured runs: fixed-timestep simulation,
 seeded randomness, and an input log that can be replayed. Six modes share one
 engine, every page is static HTML with the game loaded only when you press play.
 
-**Phase 3 (current):** Arabic and English as first-class locales. Every route
-exists twice, `/en/` and `/ar/`, generated from `content/site.json` plus one copy
-file per language, and each page carries its own `lang`/`dir`, canonical,
-hreflang pair and JSON-LD. UI strings resolve through `src/i18n/`, and the layout
-mirrors with CSS logical properties rather than a duplicated RTL stylesheet.
+**Phase 4 (current):** shareable runs. A finished run exports a 1200x630 PNG
+card (Web Share sheet on mobile, download elsewhere) and can copy a replay link
+that carries the run's seed, so `?seed=777` reproduces that exact target layout
+on any device. The playfield takes most of the viewport, and `F` — or the button
+in the rail — puts the shell in fullscreen, with a fixed-layout fallback for
+browsers without element fullscreen (Safari on iPhone). On a phone the rail
+stacks into label/control rows, the HUD becomes a four-cell strip and touch
+targets are at least 40 px.
 
-Phase 2 shipped the rest: six modes, per-mode scoring and results, a live
-settings panel, share codes, personal bests and a progress chart.
+Phase 3 made Arabic and English first-class locales: every route exists twice,
+`/en/` and `/ar/`, generated from `content/site.json` plus one copy file per
+language, and each page carries its own `lang`/`dir`, canonical, hreflang pair
+and JSON-LD. UI strings resolve through `src/i18n/`, and the layout mirrors with
+CSS logical properties rather than a duplicated RTL stylesheet.
 
-Phases 4-5 add share cards, leaderboards and monetization.
+Phase 2 shipped six modes, per-mode scoring and results, a live settings panel,
+share codes, personal bests and a progress chart.
+
+Phase 5 — global leaderboards and monetization — needs a backend, so it is not
+part of this static build.
 
 ## Stack
 
@@ -51,6 +61,7 @@ src/modes/      one file per mode + registry with mode metadata
 src/ui/         Preact shell, controller that binds sim to the browser,
                 settings panel, progress chart
 src/settings/   settings schema, sanitising, crosshair SVG, share codes
+src/share/      canvas renderer for the 1200x630 result card (EN and AR)
 src/i18n/       en/ar string catalogues; every UI label resolves through t()
 content/        modes.json and modes.ar.json — copy, metadata and FAQ per mode;
                 site.json — site chrome per locale
@@ -102,6 +113,15 @@ Difficulty values are 1 / 1.5 / 2 for Easy / Normal / Hard. Every mode reads the
 same `Appearance` (theme, target colour, shape, scale) and the same `Rng`
 stream, so two runs with the same seed and configuration are identical.
 
+## Playing on a phone
+
+The rail is a column of label/control rows below 820 px and the HUD sits under
+it as four equal cells; the primary action spans the full width. The field keeps
+at least 340 px of height and 88% of the viewport width at 360 px wide. Opening
+the settings panel gives it its own scroll area inside the shell, so the action
+button never leaves the screen. In fullscreen the editorial copy, field footer
+and progress chart are hidden and the page stops scrolling.
+
 ## Settings
 
 Settings live in one object persisted at `flicklab.settings.v1`:
@@ -137,9 +157,11 @@ A mode is expected to land in roughly 100-150 lines.
 ## Testing notes
 
 - 48 unit tests cover the loop, RNG, scoring, determinism, appearance scaling,
-  the attract field and every mode's rules; 28 Playwright tests cover each mode
-  page, the settings panel, share codes, touch input and the Arabic routes
-  (RTL layout, translated HUD and results labels, a full run on `/ar/cps/`).
+  the attract field and every mode's rules; 35 Playwright tests cover each mode
+  page, the settings panel, share codes, touch input, the Arabic routes (RTL
+  layout, translated HUD and results labels, a full run on `/ar/cps/`), the
+  bigger shell (fullscreen, seeded replay, share-card download, clipboard link)
+  and the phone layout (no horizontal overflow, field share, touch targets).
 - `tests/e2e` drives the game through `window.__fl`, exposed only when the URL
   has `?test=1` and the bundle is a dev build. It can start a run with a fixed
   seed and advance simulation time directly, so tests never depend on animation

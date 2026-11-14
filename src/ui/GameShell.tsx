@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Difficulty, ModeId, RunResult } from '../engine/types';
-import { t, type StringKey } from '../i18n';
+import { currentLocale, t, type StringKey } from '../i18n';
 import { MODE_META } from '../modes/registry';
 import { loadSettings, saveSettings, type Settings } from '../settings/model';
+import { shareCardBlob } from '../share/card';
 import { personalBest } from '../stats/store';
 import {
   GameController,
@@ -18,6 +19,18 @@ const DIFFICULTY_KEYS: Record<Difficulty, StringKey> = {
   normal: 'difficulty.normal',
   hard: 'difficulty.hard',
 };
+
+const FULLSCREEN_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+    <path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+);
+
+const EXIT_FULLSCREEN_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+    <path d="M9 4v5H4M15 20v-5h5M20 9h-5V4M4 15h5v5" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+);
 
 const EMPTY_HUD: HudSnapshot = {
   score: 0,
@@ -38,6 +51,10 @@ export interface GameShellProps {
 export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) {
   const meta = MODE_META[mode];
   const initialDuration = meta.defaultDuration * 1000;
+  // A shared replay link carries the seed of the run it points at, so the same
+  // link reproduces the same run on any device. Only the first run replays it;
+  // later runs go back to fresh randomness.
+  const replaySeed = useRef<number | null>(readSeed());
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const controllerRef = useRef<GameController | null>(null);
@@ -52,6 +69,11 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
   const [best, setBest] = useState<number | null>(null);
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [note, setNote] = useState('');
+  /** Safari has no element fullscreen on iPhone, so the shell can also take
+   *  the whole viewport through a fixed layout instead. */
+  const [immersive, setImmersive] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -92,6 +114,36 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
   }, [phase]);
 
   useEffect(() => {
+    const onChange = (): void => setFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!immersive) return;
+    document.documentElement.classList.add('is-immersive');
+    return () => document.documentElement.classList.remove('is-immersive');
+  }, [immersive]);
+
+  const toggleFullscreen = (): void => {
+    const shell = shellRef.current;
+    if (!shell) return;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+      return;
+    }
+    if (immersive) {
+      setImmersive(false);
+      return;
+    }
+    if (typeof shell.requestFullscreen !== 'function') {
+      setImmersive(true);
+      return;
+    }
+    void shell.requestFullscreen({ navigationUI: 'hide' }).catch(() => setImmersive(true));
+  };
+
+  useEffect(() => {
     const onKey = (event: KeyboardEvent): void => {
       const controller = controllerRef.current;
       if (!controller) return;
@@ -102,8 +154,19 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         event.preventDefault();
         beginRun(controller);
       } else if (event.key === 'Escape') {
+        // The browser owns Escape while it is in fullscreen, so let it through
+        // and do not turn the exit into a pause.
+        if (document.fullscreenElement) return;
+        if (immersive) {
+          setImmersive(false);
+          return;
+        }
         event.preventDefault();
         controller.togglePause();
+      } else if (event.key === 'f' || event.key === 'F') {
+        if (event.metaKey || event.ctrlKey || event.altKey) return;
+        event.preventDefault();
+        toggleFullscreen();
       } else if (event.key === 'Enter') {
         if (controller.currentPhase === 'idle') {
           event.preventDefault();
@@ -116,14 +179,17 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [immersive]);
 
   const beginRun = (controller: GameController): void => {
     setPayload(null);
+    setNote('');
     // Scroll the whole panel, not just the canvas: on a phone the rail holds
     // the clock, and a run with no visible timer is unusable.
     shellRef.current?.scrollIntoView({ block: 'nearest' });
-    controller.start();
+    const seed = replaySeed.current;
+    replaySeed.current = null;
+    controller.start(seed ?? undefined);
   };
 
   const chooseDifficulty = (next: Difficulty): void => {
@@ -143,6 +209,51 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
     saveSettings(next);
   };
 
+  const replayLink = (seed: number): string =>
+    `${location.origin}${location.pathname}?seed=${seed}`;
+
+  const copyReplayLink = async (): Promise<void> => {
+    if (!payload) return;
+    const link = replayLink(payload.result.seed);
+    try {
+      await navigator.clipboard.writeText(link);
+      setNote(t('results.linkCopied'));
+    } catch {
+      setNote(t('results.copyBlocked'));
+    }
+  };
+
+  const shareResult = async (): Promise<void> => {
+    if (!payload) return;
+    const result = payload.result;
+    try {
+      const blob = await shareCardBlob({
+        modeId: mode,
+        modeLabel: t(`mode.${mode}.label` as StringKey),
+        score: result.score,
+        accuracyPct: Math.round(result.accuracy * 100),
+        difficultyLabel: t(DIFFICULTY_KEYS[difficulty]),
+        seed: result.seed,
+        isBest: payload.isBest,
+        locale: currentLocale(),
+        url: replayLink(result.seed),
+      });
+      const file = new File([blob], `flicklab-${mode}-${result.score}.png`, { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'FlickLab' });
+        return;
+      }
+      const href = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = href;
+      anchor.download = file.name;
+      anchor.click();
+      URL.revokeObjectURL(href);
+    } catch {
+      setNote(t('results.shareFailed'));
+    }
+  };
+
   const primaryAction = (): void => {
     const controller = controllerRef.current;
     if (!controller) return;
@@ -160,7 +271,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
   const progressLabel = hud.progress ? t(hud.progress.label as StringKey) : t('hud.time');
 
   return (
-    <div class="shell" ref={shellRef}>
+    <div class={immersive ? 'shell is-immersive' : 'shell'} ref={shellRef}>
       <div class="rail">
         {meta.hasDifficulty && (
           <div class="rail-block">
@@ -208,15 +319,28 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
 
         <div class="rail-block">
           <span class="rail-label">{t('rail.setup')}</span>
-          <button
-            type="button"
-            class="ghost rail-settings"
-            aria-expanded={panelOpen}
-            aria-controls="settings-panel"
-            onClick={() => setPanelOpen((open) => !open)}
-          >
-            {t(panelOpen ? 'rail.closeSettings' : 'rail.settings')}
-          </button>
+          <div class="rail-buttons">
+            <button
+              type="button"
+              class="ghost rail-settings"
+              aria-expanded={panelOpen}
+              aria-controls="settings-panel"
+              onClick={() => setPanelOpen((open) => !open)}
+            >
+              {t(panelOpen ? 'rail.closeSettings' : 'rail.settings')}
+            </button>
+            <button
+              type="button"
+              class="ghost rail-icon"
+              data-fullscreen
+              aria-pressed={fullscreen || immersive}
+              aria-label={t(fullscreen || immersive ? 'rail.exitFullscreen' : 'rail.fullscreen')}
+              title={t(fullscreen || immersive ? 'rail.exitFullscreen' : 'rail.fullscreen')}
+              onClick={toggleFullscreen}
+            >
+              {fullscreen || immersive ? EXIT_FULLSCREEN_ICON : FULLSCREEN_ICON}
+            </button>
+          </div>
         </div>
 
         <dl class="hud">
@@ -242,6 +366,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
           <button
             type="button"
             class="primary rail-button"
+            data-action="primary"
             onClick={primaryAction}
             disabled={phase === 'countdown'}
           >
@@ -306,6 +431,22 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                 <button
                   type="button"
                   class="ghost"
+                  data-action="share-card"
+                  onClick={() => void shareResult()}
+                >
+                  {t('results.shareCard')}
+                </button>
+                <button
+                  type="button"
+                  class="ghost"
+                  data-action="copy-link"
+                  onClick={() => void copyReplayLink()}
+                >
+                  {t('results.copyLink')}
+                </button>
+                <button
+                  type="button"
+                  class="ghost"
                   onClick={() => {
                     setPayload(null);
                     setPanelOpen(true);
@@ -315,6 +456,9 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
                   {t('action.changeSettings')}
                 </button>
               </div>
+              <p class="results-feedback" aria-live="polite">
+                {note}
+              </p>
             </div>
           </div>
         )}
@@ -324,7 +468,7 @@ export function GameShell({ mode, onReady, autoStart = false }: GameShellProps) 
         <span>{t(`mode.${mode}.blurb` as StringKey)}</span>
         <span class="keys-hint">
           <kbd>Enter</kbd> {t('keys.start')} · <kbd>R</kbd> {t('keys.restart')} · <kbd>Esc</kbd>{' '}
-          {t('keys.pause')}
+          {t('keys.pause')} · <kbd>F</kbd> {t('keys.fullscreen')}
         </span>
       </div>
 
@@ -413,6 +557,13 @@ function metaLine(payload: ResultPayload, best: number | null): string {
   if (!payload.isBest) return t('results.personalBest', { score: best ?? 0 });
   if (payload.previousBest === null) return t('results.firstRun');
   return t('results.previousBest', { score: payload.previousBest });
+}
+
+function readSeed(): number | null {
+  const raw = new URLSearchParams(location.search).get('seed');
+  if (!raw || !/^\d{1,10}$/.test(raw)) return null;
+  const value = Number(raw);
+  return value <= 0xffffffff ? value : null;
 }
 
 function formatClock(ms: number): string {

@@ -310,7 +310,7 @@ ${topbar(locale, path, crumbs)}
         <p class="lede">${escapeHtml(entry.lede)}</p>
       </section>
 
-      <div class="shell" data-game data-mode="${slug}">
+      <div class="game-mount" data-game data-mode="${slug}">
         <div class="overlay overlay-idle">
           <div class="overlay-body">
             <p class="overlay-kicker">${escapeHtml(entry.preboot)}</p>
@@ -392,7 +392,7 @@ ${topbar(locale, '/', crumbs)}
         <p class="lede">${escapeHtml(copy.lede)}</p>
       </section>
 
-      <div class="shell" data-game data-demo data-mode="gridshot">
+      <div class="game-mount" data-game data-demo data-mode="gridshot">
         <div class="overlay overlay-idle">
           <div class="overlay-body">
             <p class="overlay-kicker">${escapeHtml(copy.heroKicker)}</p>

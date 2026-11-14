@@ -133,5 +133,14 @@
   "mode.reaction.label": "Reaction time",
   "mode.reaction.blurb": "Five trials: wait for the disc, then click it.",
   "mode.cps.label": "CPS test",
-  "mode.cps.blurb": "Clicks per second inside a fixed pad."
+  "mode.cps.blurb": "Clicks per second inside a fixed pad.",
+
+  "rail.fullscreen": "Fullscreen",
+  "rail.exitFullscreen": "Exit fullscreen",
+  "keys.fullscreen": "fullscreen",
+  "results.shareCard": "Share card",
+  "results.copyLink": "Copy replay link",
+  "results.linkCopied": "Replay link copied",
+  "results.copyBlocked": "Copy blocked — select the link and copy it manually",
+  "results.shareFailed": "Could not build the card"
 }
