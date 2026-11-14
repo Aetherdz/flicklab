@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Browser aim trainer with seed-verifiable runs, bilingual AR/EN.",
+  "homepage": "https://flicklab.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aetherdz/flicklab.git"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "node scripts/gen-pages.mjs && vite --host",
     "build": "node scripts/gen-pages.mjs && tsc --noEmit && vite build",
@@ -13,7 +19,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "fonts": "node scripts/fetch-fonts.mjs",
-    "pages": "node scripts/gen-pages.mjs"
+    "pages": "node scripts/gen-pages.mjs",
+    "shots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "preact": "^11.2.0"
