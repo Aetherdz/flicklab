@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FlickLab — Browser Aim Trainer</title>
+    <meta
+      name="description"
+      content="Free aim trainer in the browser. Gridshot, flick, tracking, precision, reaction time and click speed, with scores you can replay and verify."
+    />
+    <link rel="canonical" href="https://flicklab.gg/en/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/" />
+    <meta name="theme-color" content="#0b1119" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+    <style>
+      .modes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        margin-top: 40px;
+      }
+
+      .mode-card {
+        display: block;
+        padding: 22px;
+        background: var(--panel);
+      }
+
+      .mode-card:hover {
+        background: var(--panel-2);
+      }
+
+      .mode-card h2 {
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .mode-card p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .mode-card span {
+        display: block;
+        margin-top: 18px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .mode-card.is-live span {
+        color: var(--text);
+      }
+
+      .mode-card.is-live span::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 8px;
+        vertical-align: middle;
+        background: var(--accent);
+      }
+
+      .hero h1 {
+        max-width: 20ch;
+        font-size: clamp(2.4rem, 5vw, 3.4rem);
+      }
+
+      @media (max-width: 900px) {
+        .modes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .modes {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mode-card.is-later {
+        opacity: 0.55;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/gridshot/">Gridshot</a>
+          <a href="/ar/" lang="ar" hreflang="ar">العربية</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head hero">
+        <h1>Aim trainer that measures the parts you cannot feel.</h1>
+        <p class="lede">
+          Six exercises, no install, sixty seconds at a time. Every run carries a seed, so a score
+          can be replayed instead of taken on trust.
+        </p>
+      </section>
+
+      <section class="modes" aria-label="Modes">
+        <a class="mode-card is-live" href="/en/gridshot/">
+          <h2>Gridshot</h2>
+          <p>Three targets on nine cells. Instant respawn, sixty seconds.</p>
+          <span>Play now</span>
+        </a>
+        <div class="mode-card is-later">
+          <h2>Flick</h2>
+          <p>One target at a random angle and distance. Measured flick time.</p>
+          <span>In progress</span>
+        </div>
+        <div class="mode-card is-later">
+          <h2>Tracking</h2>
+          <p>Hold the cursor on a moving target. Scored as time on target.</p>
+          <span>In progress</span>
+        </div>
+        <div class="mode-card is-later">
+          <h2>Precision</h2>
+          <p>Small targets, no speed bonus. Accuracy only.</p>
+          <span>In progress</span>
+        </div>
+        <div class="mode-card is-later">
+          <h2>Reaction time</h2>
+          <p>Colour change to click, averaged over five attempts.</p>
+          <span>In progress</span>
+        </div>
+        <div class="mode-card is-later">
+          <h2>CPS test</h2>
+          <p>Clicks per second over 1, 5, 10, 30 or 60 seconds.</p>
+          <span>In progress</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

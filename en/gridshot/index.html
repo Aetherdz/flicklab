@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Gridshot Aim Trainer — 3 Targets, 60 Seconds | FlickLab</title>
+    <meta
+      name="description"
+      content="Free browser Gridshot aim trainer: three targets on a nine-cell grid, instant respawn, 60-second runs. Tracks score, accuracy, time to target and streak in real time."
+    />
+    <link rel="canonical" href="https://flicklab.gg/en/gridshot/" />
+    <link rel="alternate" hreflang="en" href="https://flicklab.gg/en/gridshot/" />
+    <link rel="alternate" hreflang="ar" href="https://flicklab.gg/ar/gridshot/" />
+    <link rel="alternate" hreflang="x-default" href="https://flicklab.gg/en/gridshot/" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlickLab" />
+    <meta property="og:title" content="Gridshot Aim Trainer — 3 Targets, 60 Seconds" />
+    <meta
+      property="og:description"
+      content="Three targets, nine cells, instant respawn. Measure score, accuracy and time to target in the browser."
+    />
+    <meta property="og:url" content="https://flicklab.gg/en/gridshot/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/fonts/saira-condensed-700-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-400-lat.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page topbar-inner">
+        <a class="brand" href="/en/">FlickLab<span>.</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="/en/gridshot/" aria-current="page">Gridshot</a>
+          <a href="/en/">All modes</a>
+          <a href="/ar/gridshot/" lang="ar" hreflang="ar">العربية</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="mode-head">
+        <h1>Gridshot</h1>
+        <p class="lede">
+          Three targets on a nine-cell grid. Every hit sends one of them somewhere new.
+          Sixty seconds, no reloads, no hiding.
+        </p>
+      </section>
+
+      <div class="shell" data-game data-mode="gridshot">
+        <div class="overlay overlay-idle">
+          <div class="overlay-body">
+            <p class="overlay-kicker">Normal targets · 60 seconds</p>
+            <button type="button" class="primary" data-play>Start run</button>
+            <p class="overlay-hint">No account, no download. Your scores stay on this device.</p>
+            <noscript>
+              <p class="overlay-hint">FlickLab needs JavaScript to run the aim trainer.</p>
+            </noscript>
+          </div>
+        </div>
+      </div>
+
+      <article class="prose">
+        <h2>What Gridshot trains</h2>
+        <p>
+          With three targets live at once, the click you are making is never the one you are
+          aiming. You scan, choose, flick, confirm, and start again immediately. That loop trains
+          target switching under time pressure — the part of aim that decides a duel before the
+          first shot — more than it trains a single rehearsed flick.
+        </p>
+        <p>
+          The grid is deliberately plain. No scenery, no weapon sway, no movement mechanics to
+          learn. What is left is the thing you actually want to measure: how fast your hand finds
+          a target it did not choose a moment ago.
+        </p>
+
+        <h2>How scoring works</h2>
+        <dl class="spec">
+          <div>
+            <dt>Score</dt>
+            <dd>Hits multiplied by the difficulty value (Easy 1, Normal 1.5, Hard 2), times ten.</dd>
+          </div>
+          <div>
+            <dt>Accuracy</dt>
+            <dd>Every click counts, including clicks that land on an empty cell.</dd>
+          </div>
+          <div>
+            <dt>Time to target</dt>
+            <dd>
+              Measured from the moment a target appears to the timestamp of the click that removes
+              it, taken from the browser input event rather than a render frame.
+            </dd>
+          </div>
+          <div>
+            <dt>Streak</dt>
+            <dd>Consecutive hits. One click on an empty cell resets it.</dd>
+          </div>
+        </dl>
+
+        <h2>Three habits that make you faster</h2>
+        <ul>
+          <li>
+            Move your eyes first. Looking at the next target before your hand leaves the current one
+            removes the pause you cannot see in your own aim.
+          </li>
+          <li>
+            Aim at the near edge of a target, not its centre. It is a shorter distance that ends in
+            the same hit.
+          </li>
+          <li>
+            Click once. A second click on a target that has already respawned is a miss, and misses
+            cost more than they look like they do.
+          </li>
+        </ul>
+
+        <h2>How to practise</h2>
+        <p>
+          Three 60-second runs with a short rest between them is a session. Longer sessions train
+          stamina, not precision, and the numbers stop improving once your forearm tightens. Come
+          back tomorrow: the gains in this exercise show up across days, not inside one sitting.
+        </p>
+        <p>
+          Change one variable at a time. Run the same difficulty and duration for a week, then move
+          one step — smaller targets or a longer run — and watch which of your numbers moves first.
+        </p>
+
+        <section class="faq">
+          <h2>Questions</h2>
+          <details>
+            <summary>Is this the same as Aim Lab or KovaaK's?</summary>
+            <p>
+              No. Those are 3D trainers with weapon handling and imported scenarios. FlickLab is a
+              browser trainer for short daily reps, with plain 2D geometry so the only thing being
+              measured is your aim.
+            </p>
+          </details>
+          <details>
+            <summary>What is a good Gridshot score?</summary>
+            <p>
+              Compare against your own average for the same difficulty and duration, not against a
+              stranger's. The score is built from hits and misses, so a fast but sloppy run and a
+              slower accurate run can land in the same place.
+            </p>
+          </details>
+          <details>
+            <summary>Does a gaming mouse matter?</summary>
+            <p>
+              A wired mouse with a high polling rate removes one source of noise from the
+              measurement. It will not fix accuracy; it only stops the hardware from hiding it.
+            </p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <span>FlickLab — aim training in the browser.</span>
+        <span>Scores are saved locally on this device.</span>
+      </div>
+    </footer>
+  </body>
+</html>

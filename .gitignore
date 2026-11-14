@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.skills/
+.playwright/
+test-results/
+playwright-report/
+*.local
+.DS_Store
+.wrangler/
