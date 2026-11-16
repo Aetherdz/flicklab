@@ -33,6 +33,14 @@
     />
     <script type="module" src="/src/main.ts"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"FlickLab — CPS test","url":"https://flicklab.vercel.app/en/cps/","inLanguage":"en","applicationCategory":"GameApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript and Canvas 2D","description":"Free CPS test with 1, 5, 10, 30 and 60 second runs. Clicks inside the pad count, clicks outside are misses, and hardware double-click bounce is ignored.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"FlickLab","url":"https://flicklab.vercel.app/en/"}},{"@type":"FAQPage","inLanguage":"en","mainEntity":[{"@type":"Question","name":"Does CPS matter for aim?","acceptedAnswer":{"@type":"Answer","text":"Only for games where fire rate is limited by clicking. For tracking and flicking, the movement is the bottleneck, not the click."}},{"@type":"Question","name":"Why are two very fast clicks merged?","acceptedAnswer":{"@type":"Answer","text":"Mechanical switches bounce, and a single physical click can produce two electrical events. The 20 ms floor removes that noise while still allowing up to 50 clicks per second."}},{"@type":"Question","name":"Why does the pad have a difficulty setting?","acceptedAnswer":{"@type":"Answer","text":"It changes the pad size. A smaller pad requires a steadier hand at the same click rate, which makes the score multiplier meaningful."}}]}]}</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6LBX1C4GZC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6LBX1C4GZC');
+    </script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4f2f91c8758d4aa7a8b5f4344e3c3ab9"}'></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

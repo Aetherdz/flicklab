@@ -16,6 +16,17 @@ const ROOT = join(import.meta.dirname, '..');
  *  from another host (previews, a new domain) with SITE_URL=... */
 const SITE = (process.env.SITE_URL || 'https://flicklab.vercel.app').replace(/\/+$/, '');
 
+/** GA4 + Cloudflare Web Analytics, shared by every generated page. */
+const ANALYTICS = `    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6LBX1C4GZC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6LBX1C4GZC');
+    </script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4f2f91c8758d4aa7a8b5f4344e3c3ab9"}'></script>
+`;
+
 const ORDER = ['gridshot', 'flick', 'tracking', 'precision', 'reaction', 'cps'];
 const LOCALES = ['en', 'ar'];
 
@@ -309,7 +320,7 @@ ${alternates(path)}
 ${preloadTags(locale)}
     <script type="module" src="/src/main.ts"></script>
     <script type="application/ld+json">${jsonLd(locale, slug, entry)}</script>
-  </head>
+${ANALYTICS}  </head>
   <body>
 ${topbar(locale, path, crumbs)}
 
@@ -396,7 +407,7 @@ ${alternates('/')}
 ${preloadTags(locale)}
     <script type="module" src="/src/main.ts"></script>
     <style>${HOME_STYLES}    </style>
-  </head>
+${ANALYTICS}  </head>
   <body>
 ${topbar(locale, '/', crumbs)}
 
