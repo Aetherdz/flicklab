@@ -481,4 +481,28 @@ for (const locale of LOCALES) {
   }
 }
 
+const sitemapEntries = LOCALES.flatMap((locale) =>
+  [
+    `/${locale}/`,
+    ...ORDER.map((slug) => `/${locale}/${slug}/`),
+  ].map((path) => {
+    const alternates = LOCALES.map(
+      (alternateLocale) =>
+        `    <xhtml:link rel="alternate" hreflang="${alternateLocale}" href="${SITE}/${alternateLocale}${path.slice(locale.length + 1)}" />`,
+    ).join('\n');
+    const defaultHref = `${SITE}/en${path.slice(locale.length + 1)}`;
+    return `  <url>\n    <loc>${SITE}${path}</loc>\n${alternates}\n    <xhtml:link rel="alternate" hreflang="x-default" href="${defaultHref}" />\n  </url>`;
+  }),
+).join('\n');
+
+await mkdir(join(ROOT, 'public'), { recursive: true });
+await writeFile(
+  join(ROOT, 'public', 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries}\n</urlset>\n`,
+);
+await writeFile(
+  join(ROOT, 'public', 'robots.txt'),
+  `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`,
+);
+
 console.log(`generated ${written} pages for ${LOCALES.join(' + ')}`);

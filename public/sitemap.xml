@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://flicklab.vercel.app/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/gridshot/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/gridshot/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/gridshot/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/gridshot/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/flick/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/flick/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/flick/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/flick/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/tracking/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/tracking/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/tracking/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/tracking/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/precision/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/precision/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/precision/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/precision/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/reaction/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/reaction/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/reaction/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/reaction/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/en/cps/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/cps/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/cps/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/cps/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/gridshot/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/gridshot/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/gridshot/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/gridshot/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/flick/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/flick/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/flick/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/flick/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/tracking/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/tracking/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/tracking/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/tracking/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/precision/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/precision/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/precision/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/precision/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/reaction/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/reaction/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/reaction/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/reaction/" />
+  </url>
+  <url>
+    <loc>https://flicklab.vercel.app/ar/cps/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flicklab.vercel.app/en/cps/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://flicklab.vercel.app/ar/cps/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flicklab.vercel.app/en/cps/" />
+  </url>
+</urlset>
